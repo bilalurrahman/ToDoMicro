@@ -12,4 +12,11 @@
     <ProjectReference Include="..\Authentication.Common\Authentication.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Register\Commands\AddUser\" />
+    <Folder Include="Features\Register\Commands\UpdateUser\" />
+    <Folder Include="Features\Register\Queries\GetUser\" />
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
 </Project>
