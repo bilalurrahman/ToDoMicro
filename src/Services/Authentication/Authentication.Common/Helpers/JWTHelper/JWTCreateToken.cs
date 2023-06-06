@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,11 @@ namespace Authentication.Common.Helpers.JWTHelper
 {
     public class JWTCreateToken: IJWTCreateToken
     {
-        private readonly IConfiguration configuration;
-        public JWTCreateToken(IConfiguration configuration)
+        private readonly IOptions<JWTTokenSettings> _iOptions;
+        public JWTCreateToken( IOptions<JWTTokenSettings> iOptions)
         {
-            this.configuration = configuration;
+            //this.configuration = configuration;
+            _iOptions = iOptions;
         }
         public async Task<JWTModel> Generate(string username)
         {
@@ -30,8 +32,8 @@ namespace Authentication.Common.Helpers.JWTHelper
         }
 
         private JWTModel CreateToken(IEnumerable<Claim> claims)
-        {
-            var secretKey = Encoding.ASCII.GetBytes(configuration.GetValue<string>("SecretKey"));
+        {  
+            var secretKey = Encoding.ASCII.GetBytes(_iOptions.Value.SecretKey);
             var expiresAt = DateTime.UtcNow.AddMinutes(20);
 
             var jwt = new JwtSecurityToken(

@@ -1,4 +1,4 @@
-//using Authentication.Common.Helpers.JWTHelper;
+using Authentication.Common.Helpers.JWTHelper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,16 +33,18 @@ namespace Authentication.API
 
             services.AddCustomAuth(Configuration);
 
+            var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
+            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly, domain);
+            services.Configure<JWTTokenSettings>(Configuration.GetSection("JWTTokenSettings"));
+            services.AddScoped<IJWTCreateToken, JWTCreateToken>();
+
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
             });
 
-
-           // services.Configure<JWTTokenSettings>(c => Configuration.GetSection("JWTTokenSettings"));
-           // services.AddScoped<IJWTCreateToken, JWTCreateToken>();
-            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
