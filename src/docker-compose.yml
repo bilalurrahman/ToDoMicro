@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+
+  portainer:
+    image: portainer/portainer-ce
+
+
+  authentication.api:
+    image: ${DOCKER_REGISTRY-}authenticationapi
+    build:
+      context: .
+      dockerfile: Services/Authentication/Authentication.API/Dockerfile
+
+volumes:
+  portainer_data:    
