@@ -13,11 +13,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
-
+  userdb:
+    container_name: user
+    environment:
+        SA_PASSWORD: "SwN12345678"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
 
 
   authentication.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:UserDBQueryConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;ApplicationIntent=ReadOnly;"
+      - "DatabaseSettings:UserDBConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;"
+    depends_on:
+      - userdb
     ports:
-      - "9500:80"
+      - "9700:80"

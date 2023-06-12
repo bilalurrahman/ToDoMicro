@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Authentication.Domain.Entities
 {
-    public class Register : EntityBase
-    {
+    public class RegisterUser : EntityBase
+    {       
         public string Username { get; set; }
         public string Password{ get; set; }
     }

@@ -8,8 +8,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["Services/Authentication/Authentication.API/Authentication.API.csproj", "Services/Authentication/Authentication.API/"]
+COPY ["Services/Authentication/Authentication.Infrastructure/Authentication.Infrastructure.csproj", "Services/Authentication/Authentication.Infrastructure/"]
 COPY ["Services/Authentication/Authentication.Application/Authentication.Application.csproj", "Services/Authentication/Authentication.Application/"]
 COPY ["Services/Authentication/Authentication.Common/Authentication.Common.csproj", "Services/Authentication/Authentication.Common/"]
+COPY ["Services/Authentication/Authentication.Domain/Authentication.Domain.csproj", "Services/Authentication/Authentication.Domain/"]
 RUN dotnet restore "Services/Authentication/Authentication.API/Authentication.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Authentication/Authentication.API"

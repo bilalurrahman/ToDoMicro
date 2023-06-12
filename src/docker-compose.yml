@@ -5,6 +5,9 @@ services:
   portainer:
     image: portainer/portainer-ce
 
+  userdb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+
 
   authentication.api:
     image: ${DOCKER_REGISTRY-}authenticationapi

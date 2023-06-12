@@ -1,19 +1,11 @@
-using Authentication.Common.Helpers.JWTHelper;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+
 
 namespace Authentication.API
 {
@@ -32,12 +24,12 @@ namespace Authentication.API
 
 
             services.AddCustomAuth(Configuration);
+            services.AddCustomMediatr(Configuration);
+            services.AddCustomConfiguration(Configuration);
+            services.AddDependencyInjection(Configuration);
 
-            var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
-            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly, domain);
-            services.Configure<JWTTokenSettings>(Configuration.GetSection("JWTTokenSettings"));
-            services.AddScoped<IJWTCreateToken, JWTCreateToken>();
-
+           
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -1,4 +1,6 @@
-﻿using Authentication.Common.Helpers.JWTHelper;
+﻿using Authentication.Application.Features.Register.Queries.GetUser;
+using Authentication.Common.Extensions;
+using Authentication.Common.Helpers.JWTHelper;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,21 +10,31 @@ namespace Authentication.Application.Features.Login
     public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse>
     {
        private readonly IJWTCreateToken _iJWTCreateToken;
-        public LoginHandler(IJWTCreateToken iJWTCreateToken)
+        private readonly IMediator _mediator;
+
+        public LoginHandler(IJWTCreateToken iJWTCreateToken, IMediator mediator)
         {
             _iJWTCreateToken = iJWTCreateToken;
+            _mediator = mediator;
         }
         public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-
-            if(request.username=="admin" && request.password == "123")
+            var user = await _mediator.Send(new GetUserRequest
             {
-                var Response = await _iJWTCreateToken.Generate(request.username);
-                return new LoginResponse
+                username = request.username
+            });
+            if (user?.Id>0)
+            {
+                var isCorrectPassword = Extensions.VerifyHashedValues(request.password, user.password);
+                if (isCorrectPassword)
                 {
-                    Token = Response.Token,
-                    Expiry = Response.Expiry
-                };             
+                    var Response = await _iJWTCreateToken.Generate(request.username);
+                    return new LoginResponse
+                    {
+                        Token = Response.Token,
+                        Expiry = Response.Expiry
+                    };
+                }
             }
 
             return new LoginResponse();
