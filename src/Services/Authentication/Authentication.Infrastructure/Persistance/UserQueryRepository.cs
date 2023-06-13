@@ -2,6 +2,7 @@
 using Authentication.Domain.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,6 +14,8 @@ namespace Authentication.Infrastructure.Persistance
     {
 
         private readonly IConfiguration _configuration;
+       
+
         private IDbConnection GetQueryConnection()
         {
             return new SqlConnection(_configuration.GetValue<string>("DatabaseSettings:UserDBQueryConnection"));
@@ -20,23 +23,31 @@ namespace Authentication.Infrastructure.Persistance
         public UserQueryRepository(IConfiguration configuration)
         {
             _configuration = configuration;
+            
         }
         public async Task<RegisterUser> Get(string username)
         {
-           
-            using (IDbConnection _dbConnection = this.GetQueryConnection())
+            try
             {
-                string query = @"SELECT [id]
+                var com = _configuration.GetValue<string>("DatabaseSettings:UserDBQueryConnection");
+                using (IDbConnection _dbConnection = this.GetQueryConnection())
+                {
+                    string query = @"SELECT [id]
                               ,[username] Username   
                               ,[password] Password
                               ,[is_active] isActive                              
                           FROM [dbo].[Users] with (nolock)
                           where [username] = @Username";
-                
-                var registeredUser = await _dbConnection.QueryFirstOrDefaultAsync<RegisterUser>(query, new { Username = username });
-                
-                return registeredUser;
- 
+
+                    var registeredUser = await _dbConnection.QueryFirstOrDefaultAsync<RegisterUser>(query, new { Username = username });
+
+                    return registeredUser;
+
+                }
+            }
+            catch (Exception ex)
+            {               
+                throw new Exception(ex.ToString());
             }
         }
 

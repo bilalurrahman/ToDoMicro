@@ -2,7 +2,6 @@ version: '3.4'
 
 services:
 
-
   portainer:
     container_name: portainer
     restart: always
@@ -31,4 +30,4 @@ services:
     depends_on:
       - userdb
     ports:
-      - "9700:80"
+      - "5700:80"

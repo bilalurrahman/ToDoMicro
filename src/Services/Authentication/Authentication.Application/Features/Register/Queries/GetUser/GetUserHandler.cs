@@ -19,7 +19,7 @@ namespace Authentication.Application.Features.Register.Queries.GetUser
         public async Task<GetUserResponse> Handle(GetUserRequest request, CancellationToken cancellationToken)
         {
             var user = await _userQueryRepository.Get(request.username);
-            if (user?.Id==0)
+            if (user==null || user?.Id==0)
             {
                 return new GetUserResponse();
             }
