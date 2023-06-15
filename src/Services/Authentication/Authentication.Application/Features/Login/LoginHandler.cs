@@ -36,6 +36,10 @@ namespace Authentication.Application.Features.Login
                     };
                 }
             }
+            else
+            {
+                throw new Exceptions.UserNotFoundException(request.username);
+            }
 
             return new LoginResponse();
         }

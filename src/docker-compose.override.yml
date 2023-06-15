@@ -20,6 +20,10 @@ services:
     restart: always
     ports:
         - "1433:1433"
+    volumes:
+      - ./data:/var/opt/mssql/data
+      - ./log:/var/opt/mssql/log
+      - ./secrets:/var/opt/mssql/secrets
 
 
   authentication.api:

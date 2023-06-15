@@ -26,7 +26,7 @@ namespace Authentication.Application.Features.Register.Commands.AddUser
             }); 
             if(user!=null && user.Id > 0)
             {
-                return new RegisterUserResponse();
+                throw new Exceptions.UserDuplicatedException();
             }
             return new RegisterUserResponse
             {

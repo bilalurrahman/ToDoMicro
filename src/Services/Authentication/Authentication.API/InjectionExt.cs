@@ -1,4 +1,5 @@
-﻿using Authentication.Application.Contracts.Persistance;
+﻿using Authentication.Application.Behaviours;
+using Authentication.Application.Contracts.Persistance;
 using Authentication.Common.Helpers.JWTHelper;
 using Authentication.Infrastructure.Persistance;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
 using System.Text;
-
+using FluentValidation;
 namespace Authentication.API
 {
     public static class InjectionExt
@@ -39,10 +40,20 @@ namespace Authentication.API
         }
 
 
+
+        public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services, IConfiguration configuration)
+        {
+        
+            services.AddValidatorsFromAssembly(typeof(Application.Features.Login.LoginRequest).GetTypeInfo().Assembly);
+           // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            return services;
+        }
+
         public static IServiceCollection AddCustomMediatr(this IServiceCollection services, IConfiguration configuration)
         {
             var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
-            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly, domain);
+            services.AddMediatR(typeof(Startup).Assembly, domain);
 
             return services;
         }
@@ -55,8 +66,12 @@ namespace Authentication.API
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IJWTCreateToken, JWTCreateToken>();
-            services.AddTransient<IUserQueryRepository, UserQueryRepository>();
-            services.AddTransient<IUserCommandRepository, UserCommandRepository>();
+            services.AddScoped<IUserQueryRepository, UserQueryRepository>();
+            services.AddScoped<IUserCommandRepository, UserCommandRepository>();
+
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             return services;
         }

@@ -17,3 +17,4 @@ services:
 
 volumes:
   portainer_data:    
+  sql_data:

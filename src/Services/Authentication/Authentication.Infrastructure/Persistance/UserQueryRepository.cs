@@ -2,7 +2,6 @@
 using Authentication.Domain.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -27,9 +26,7 @@ namespace Authentication.Infrastructure.Persistance
         }
         public async Task<RegisterUser> Get(string username)
         {
-            try
-            {
-                var com = _configuration.GetValue<string>("DatabaseSettings:UserDBQueryConnection");
+ 
                 using (IDbConnection _dbConnection = this.GetQueryConnection())
                 {
                     string query = @"SELECT [id]
@@ -44,11 +41,8 @@ namespace Authentication.Infrastructure.Persistance
                     return registeredUser;
 
                 }
-            }
-            catch (Exception ex)
-            {               
-                throw new Exception(ex.ToString());
-            }
+     
+  
         }
 
     }

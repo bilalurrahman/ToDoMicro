@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace Authentication.API
 
 
             services.AddCustomAuth(Configuration);
+            services.AddCustomFluentValidation(Configuration);
             services.AddCustomMediatr(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddDependencyInjection(Configuration);

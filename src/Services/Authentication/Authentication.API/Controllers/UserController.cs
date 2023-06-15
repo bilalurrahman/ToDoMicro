@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using MediatR;
 using Authentication.Application.Features.Register.Commands.AddUser;
+using Microsoft.AspNetCore.Http;
 
 namespace Authentication.API.Controllers
 {
@@ -21,6 +22,9 @@ namespace Authentication.API.Controllers
 
         
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> Login([FromBody] LoginRequest credential)
         {
             var response = await _mediator.Send(credential);
@@ -28,6 +32,9 @@ namespace Authentication.API.Controllers
         }
 
         [HttpPost("Register")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest newUser)
         {
             var response = await _mediator.Send(newUser);
