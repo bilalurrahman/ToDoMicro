@@ -15,6 +15,12 @@ services:
       context: .
       dockerfile: Services/Authentication/Authentication.API/Dockerfile
 
+  localization.grpc:
+    image: ${DOCKER_REGISTRY-}localizationgrpc
+    build:
+      context: .
+      dockerfile: Services/Localization/Localization.Grpc/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
