@@ -23,7 +23,7 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
         {
             try
             {
-                //await 
+                await _next(context);
             }
             catch(Exception ex)
             {
@@ -42,8 +42,22 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
             {
                 case BusinessRuleException ex:
                     error.Status = (int)HttpStatusCode.Conflict;
+                    error.ErrorCode = ex.ErrorEvent.Id;
+                    error.ErrorMessage = ex.ErrorEvent.Name;
                     error.StackTrace = ex.StackTrace;
-                    error.ErrorMessage = ex.Message;
+                    
+                    break;
+                case EntityNotFoundException ex:
+                    error.Status = (int)HttpStatusCode.NotFound;
+                    error.ErrorCode = ex.ErrorEvent.Id;
+                    error.ErrorMessage = ex.ErrorEvent.Name;
+                    error.StackTrace = ex.StackTrace;
+                    break;
+                case CommonException ex:
+                    error.Status = (int)HttpStatusCode.InternalServerError;
+                    error.ErrorCode = ex.ErrorEvent.Id;
+                    error.ErrorMessage = ex.ErrorEvent.Name;
+                    error.StackTrace = ex.StackTrace;
                     break;
 
                 default:
@@ -54,12 +68,10 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
             }
 
 
-            var exceptionResult = JsonSerializer.Serialize(error);
-
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)error.Status;
 
-            return context.Response.WriteAsync(exceptionResult);
+            return context.Response.WriteAsync(JsonSerializer.Serialize(error));
 
 
         }

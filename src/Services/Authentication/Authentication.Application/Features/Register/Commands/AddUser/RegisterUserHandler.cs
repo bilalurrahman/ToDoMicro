@@ -5,6 +5,7 @@ using Authentication.Common.Extensions;
 using System.Threading;
 using System.Threading.Tasks;
 using Authentication.Application.Features.Register.Queries.GetUser;
+using SharedKernal.Common.Exceptions;
 
 namespace Authentication.Application.Features.Register.Commands.AddUser
 {
@@ -26,7 +27,7 @@ namespace Authentication.Application.Features.Register.Commands.AddUser
             }); 
             if(user!=null && user.Id > 0)
             {
-                throw new Exceptions.UserDuplicatedException();
+                throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.UserNotAvailable.Id, LogEventIds.BusinessRuleEventIds.UserNotAvailable.Name);
             }
             return new RegisterUserResponse
             {

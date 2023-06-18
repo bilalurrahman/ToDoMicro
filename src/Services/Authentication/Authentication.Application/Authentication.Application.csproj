@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared\SharedKernal.csproj" />
     <ProjectReference Include="..\Authentication.Common\Authentication.Common.csproj" />
     <ProjectReference Include="..\Authentication.Domain\Authentication.Domain.csproj" />
   </ItemGroup>

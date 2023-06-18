@@ -25,7 +25,7 @@ namespace Localization.Grpc
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
             services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
-            services.AddScoped<ILocalizationQueryRepository, LocalizationQueryRepository>();
+            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
 
             return services;
         }

@@ -45,8 +45,7 @@ namespace Authentication.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            // Add Middleware
-            app.UseMiddleware<CustomGlobalExceptionHandler>();
+            
 
             if (env.IsDevelopment())
             {
@@ -55,10 +54,12 @@ namespace Authentication.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication.API v1"));
             }
 
-
+            app.AddGlobalExceptionHandler();
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            // Add Middleware
+            
 
             app.UseAuthentication();
             app.UseAuthorization();

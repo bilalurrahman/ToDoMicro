@@ -2,6 +2,7 @@
 using Authentication.Common.Extensions;
 using Authentication.Common.Helpers.JWTHelper;
 using MediatR;
+using SharedKernal.Common.Exceptions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Authentication.Application.Features.Login
             {
                 username = request.username
             });
-            if (user?.Id>0)
+            if (user?.Id > 0)
             {
                 var isCorrectPassword = Extensions.VerifyHashedValues(request.password, user.password);
                 if (isCorrectPassword)
@@ -38,7 +39,7 @@ namespace Authentication.Application.Features.Login
             }
             else
             {
-                throw new Exceptions.UserNotFoundException(request.username);
+                throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.IncorrectUserName.Id, LogEventIds.EntityNotFoundEventIds.IncorrectUserName.Name);
             }
 
             return new LoginResponse();

@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 namespace SharedKernal.Common.Exceptions
 {
     [Serializable]
-    public class EntityNotFoundException : Exception
+    public class CommonException : Exception
     {
         public EventId ErrorEvent { get; private set; }
-        private const string EntityErrorsKey = "EntityNotFoundErrors";
-        public EntityNotFoundException(string message) : base(message)
-        {
+        private const string CommonErrorsKey = "CommonErrors";
 
+        public CommonException(string message) : base(message)
+        {
         }
+
         public Dictionary<int, string> Errors
         {
             get
             {
-                return Data[EntityErrorsKey] as Dictionary<int, string>;
+                return Data[CommonErrorsKey] as Dictionary<int, string>;
             }
         }
-
-        public EntityNotFoundException(int errorCode,string message) : base(message)
+        public CommonException(int errorcode, string message) : base(message)
         {
-            ErrorEvent = new EventId(errorCode, message);
+            ErrorEvent = new EventId(errorcode, message);
         }
     }
 }
