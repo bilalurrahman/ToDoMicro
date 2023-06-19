@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Localization\Localization.Core\Localization.Application.csproj" />
+    <ProjectReference Include="..\..\Localization\Localization.Integration\Localization.Integration.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\SharedKernal.csproj" />
     <ProjectReference Include="..\Authentication.Application\Authentication.Application.csproj" />
     <ProjectReference Include="..\Authentication.Infrastructure\Authentication.Infrastructure.csproj" />

@@ -1,4 +1,9 @@
 
+using Localization.Application.Contracts.Persistance;
+using Localization.Application.Contracts.Services;
+using Localization.Grpc.Protos;
+using Localization.Integration.Persistance;
+using Localization.Integration.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Microsoft.OpenApi.Models;
+using SharedKernal;
+using SharedKernal.GrpcServices;
 using SharedKernal.Middlewares.ExceptionHandlers;
 
 namespace Authentication.API
@@ -30,15 +37,21 @@ namespace Authentication.API
             services.AddCustomConfiguration(Configuration);
             services.AddDependencyInjection(Configuration);
 
-           
-            
+            services.AddGrpcClient<LocalizationProtoService.LocalizationProtoServiceClient>
+                 (o => o.Address = new System.Uri(Configuration["GrpcSettings:LocalizationUrl"]));
+            services.AddScoped<LocalizationGrpcServices>();
+            services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
+            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
+
+
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
             });
-
+            ContainerManager.Container = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

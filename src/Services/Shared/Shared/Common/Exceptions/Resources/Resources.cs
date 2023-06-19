@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Localization.Grpc.Protos;
+using SharedKernal.GrpcServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +12,12 @@ namespace SharedKernal.Common.Exceptions.Resources
     {
         public static string GetResources(string key)
         {
-            return "Username and password is incorrect";
 
+            LocalizationGrpcServices _localizationService = (LocalizationGrpcServices)ContainerManager.Container.GetService(typeof(LocalizationGrpcServices));
+            //LocalizationGrpcServices localizationGrpcServices;
+
+            return _localizationService.GetLocalizationResponse(key).Result;
+                        
             //Call Grpc from here.
         }
     }

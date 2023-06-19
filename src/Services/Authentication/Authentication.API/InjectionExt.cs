@@ -11,6 +11,8 @@ using System;
 using System.Reflection;
 using System.Text;
 using FluentValidation;
+using SharedKernal.GrpcServices;
+
 namespace Authentication.API
 {
     public static class InjectionExt
@@ -72,6 +74,10 @@ namespace Authentication.API
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+
+
+            //services.AddScoped<ILocalizationGrpcServices, LocalizationGrpcServices>();
 
             return services;
         }

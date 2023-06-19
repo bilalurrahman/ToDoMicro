@@ -8,7 +8,7 @@ namespace SharedKernal.Common.Exceptions.Resources
 {
     public class BusinessRuleExceptionResources:Resources
     {
-        public static string UserNotAvailable => GetResources("UserNotAvailable");
+        public static string UserNotAvailable => GetResources("UserDuplicated");
 
     }
 }
