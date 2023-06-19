@@ -17,15 +17,15 @@ namespace Localization.Grpc
     {
         public static IServiceCollection AddCustomMediatr(this IServiceCollection services)
         {
-            //var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
-            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+            var domain = Assembly.Load(new AssemblyName("Localization.Application"));
+            services.AddMediatR(typeof(Startup).Assembly, domain);
             return services;
         }
 
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
             services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
-            services.AddScoped<ILocalizationQueryRepository, LocalizationQueryRepository>();
+            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
 
             return services;
         }

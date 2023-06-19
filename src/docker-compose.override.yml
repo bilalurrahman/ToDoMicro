@@ -31,6 +31,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:UserDBQueryConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;ApplicationIntent=ReadOnly;"
       - "DatabaseSettings:UserDBConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;"
+      - "GrpcSettings:LocalizationUrl=localization.grpc"
     depends_on:
       - userdb
     ports:
@@ -38,9 +39,8 @@ services:
   localization.grpc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - "DatabaseSettings:LocalizationRecordsDBQueryConnection=Server=userdb;Database=Localization;User Id=sa;Password=SwN12345678;ApplicationIntent=ReadOnly;"
+    depends_on:
+      - userdb
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "5701:80"
