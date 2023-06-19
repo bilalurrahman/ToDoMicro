@@ -2,6 +2,16 @@ version: '3.4'
 
 services:
 
+
+  tasksdb:
+    container_name: tasksdb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+
   portainer:
     container_name: portainer
     restart: always
@@ -11,6 +21,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+
 
   userdb:
     container_name: user
@@ -26,6 +37,7 @@ services:
       - ./secrets:/var/opt/mssql/secrets
 
 
+
   authentication.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -36,6 +48,9 @@ services:
       - userdb
     ports:
       - "5700:80"
+
+
+
   localization.grpc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -44,3 +59,16 @@ services:
       - userdb
     ports:
       - "5701:80"
+
+
+
+  tasks.api:
+    container_name: tasks.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
+    depends_on:
+      - tasksdb
+    ports:
+      - "5702:80"
+

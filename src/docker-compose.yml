@@ -1,6 +1,8 @@
 version: '3.4'
 
 services:
+  tasksdb:
+    image: mongo
 
   portainer:
     image: portainer/portainer-ce
@@ -21,6 +23,14 @@ services:
       context: .
       dockerfile: Services/Localization/Localization.Grpc/Dockerfile
 
+  tasks.api:
+    image: ${DOCKER_REGISTRY-}tasksapi
+    build:
+      context: .
+      dockerfile: Services/Tasks/Tasks.API/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
+  mongo_data:
+
