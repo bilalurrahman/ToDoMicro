@@ -22,7 +22,16 @@ namespace Tasks.API
             services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
             services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
             services.AddScoped<ITasksContext, TasksContext>();
-           
+
+            return services;
+        }
+
+        public static IServiceCollection AddSharedKernalDependencies(this IServiceCollection services)
+        {
+            return services;
+        }
+        public static IServiceCollection AddLocalizationGrpcDependencies(this IServiceCollection services)
+        {
             return services;
         }
     }

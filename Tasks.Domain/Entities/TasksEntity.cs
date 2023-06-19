@@ -12,9 +12,6 @@ namespace Tasks.Domain.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
-
-        public bool isCompleted { get; set; }
-
         public DateTime DueDate { get; set; }
 
         public bool HaveReminder { get; set; }

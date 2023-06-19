@@ -1,9 +1,5 @@
 
-using Localization.Application.Contracts.Persistance;
-using Localization.Application.Contracts.Services;
-using Localization.Grpc.Protos;
-using Localization.Integration.Persistance;
-using Localization.Integration.Services;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,12 +32,11 @@ namespace Authentication.API
             services.AddCustomMediatr(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddDependencyInjection(Configuration);
+            services.AddSharedKernalDependencies();
+            services.AddLocalizationGrpcDependencies(Configuration);
 
-            services.AddGrpcClient<LocalizationProtoService.LocalizationProtoServiceClient>
-                 (o => o.Address = new System.Uri(Configuration["GrpcSettings:LocalizationUrl"]));
-            services.AddScoped<LocalizationGrpcServices>();
-            services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
-            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
+
+            
 
 
 

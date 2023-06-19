@@ -12,6 +12,11 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using SharedKernal.GrpcServices;
+using Localization.Application.Contracts.Persistance;
+using Localization.Application.Contracts.Services;
+using Localization.Grpc.Protos;
+using Localization.Integration.Persistance;
+using Localization.Integration.Services;
 
 namespace Authentication.API
 {
@@ -75,11 +80,26 @@ namespace Authentication.API
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
-
-
-            //services.AddScoped<ILocalizationGrpcServices, LocalizationGrpcServices>();
-
             return services;
         }
+
+        public static IServiceCollection AddSharedKernalDependencies(this IServiceCollection services)
+        {
+            services.AddScoped<LocalizationGrpcServices>();
+            return services;
+        }
+        public static IServiceCollection AddLocalizationGrpcDependencies(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            services.AddGrpcClient<LocalizationProtoService.LocalizationProtoServiceClient>
+                 (o => o.Address = new Uri(configuration["GrpcSettings:LocalizationUrl"]));
+
+            services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
+            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
+
+            
+            return services;
+        }
+
     }
 }
