@@ -28,7 +28,12 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
                 Status=request.Status,
                 HaveReminder=request.HaveReminder,
                 CreatedDate = DateTime.Now,
-                LastModifiedDate = DateTime.Now
+                LastModifiedDate = DateTime.Now,
+                CreatedBy=request.CreatedBy,
+                isActive=request.isActive,
+                userId=request.userId,
+                LastModifiedBy=request.LastModifiedBy,
+                isCompleted=request.isCompleted
             });
 
             return new InsertTasksResponse();

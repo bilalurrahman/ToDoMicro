@@ -20,6 +20,7 @@ namespace Tasks.API
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
             services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
+            services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
             services.AddScoped<ITasksContext, TasksContext>();
            
             return services;
