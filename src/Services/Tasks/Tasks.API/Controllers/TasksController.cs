@@ -1,8 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Tasks.Application.Features.Tasks.Commands.InsertTasks;
 using Tasks.Application.Features.Tasks.Queries;
@@ -12,7 +11,7 @@ namespace Tasks.API.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TasksController : ControllerBase
     {
         private readonly IMediator _mediator;
