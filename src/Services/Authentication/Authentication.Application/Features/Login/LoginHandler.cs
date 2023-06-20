@@ -29,7 +29,7 @@ namespace Authentication.Application.Features.Login
                 var isCorrectPassword = Extensions.VerifyHashedValues(request.password, user.password);
                 if (isCorrectPassword)
                 {
-                    var Response = await _iJWTCreateToken.Generate(request.username);
+                    var Response = await _iJWTCreateToken.Generate(request.username, user.Id);
                     return new LoginResponse
                     {
                         Token = Response.Token,

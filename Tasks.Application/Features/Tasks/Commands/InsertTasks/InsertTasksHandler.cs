@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,20 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
 {
     public class InsertTasksHandler : IRequestHandler<InsertTasksRequest, InsertTasksResponse>
     {
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
-        public InsertTasksHandler(ITasksCommandsRepository tasksCommandsRepository)
+        public InsertTasksHandler(ITasksCommandsRepository tasksCommandsRepository, IHttpContextAccessor httpContextAccessor)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId");
             await _tasksCommandsRepository.CreateTasks(new TasksEntity
             {
+               
                 Title = request.Title,
                 Description= request.Description,
                 DueDate=request.DueDate,
@@ -31,7 +37,7 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
                 LastModifiedDate = DateTime.Now,
                 CreatedBy=request.CreatedBy,
                 isActive=request.isActive,
-                userId=request.userId,
+                userId= Convert.ToInt64(userId),
                 LastModifiedBy=request.LastModifiedBy,
                 isCompleted=request.isCompleted
             });

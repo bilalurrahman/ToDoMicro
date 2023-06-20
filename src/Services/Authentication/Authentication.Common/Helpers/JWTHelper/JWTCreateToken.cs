@@ -19,12 +19,13 @@ namespace Authentication.Common.Helpers.JWTHelper
             //this.configuration = configuration;
             _iOptions = iOptions;
         }
-        public async Task<JWTModel> Generate(string username)
+        public async Task<JWTModel> Generate(string username, int id)
         {
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,username),
-                    new Claim(ClaimTypes.Role,"User")
+                    new Claim(ClaimTypes.Role,"User"),
+                    new Claim("UserId",id.ToString())
                 };
            
             return CreateToken(claims);
