@@ -45,6 +45,7 @@ namespace Authentication.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
+
             });
             ContainerManager.Container = services.BuildServiceProvider();
         }
