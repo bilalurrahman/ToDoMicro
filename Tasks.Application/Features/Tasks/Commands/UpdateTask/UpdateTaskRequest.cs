@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 using Tasks.Domain.Entities;
 
-namespace Tasks.Application.Contracts
+namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
-   public interface ITasksQueryRepository
+    public class UpdateTaskRequest:TasksEntity,IRequest<UpdateTaskResponse>
     {
-        Task<List<TasksEntity>> GetAll();
-        Task <TasksEntity> Get(string id);
-
         
     }
 }

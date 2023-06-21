@@ -29,7 +29,7 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
-            await _tasksCommandsRepository.CreateTasks(new TasksEntity
+            await _tasksCommandsRepository.CreateTask(new TasksEntity
             {
 
                 Title = request.Title,

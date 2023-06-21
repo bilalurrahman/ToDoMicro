@@ -18,6 +18,11 @@ namespace Tasks.Infrastructure.Persistance
             _context = context;
         }
 
+        public async Task<TasksEntity> Get(string id)
+        {
+            return await _context.TasksCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
+        }
+
         public async Task<List<TasksEntity>> GetAll()
         {
             return await _context.TasksCollection.Find(p => true).ToListAsync();
