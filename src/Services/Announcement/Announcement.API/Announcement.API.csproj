@@ -12,4 +12,8 @@
     <Folder Include="Controllers\NotificationControllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Announcement.Application\Announcement.Application.csproj" />
+  </ItemGroup>
+
 </Project>
