@@ -1,4 +1,3 @@
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Tasks.API
+namespace Announcement.API
 {
     public class Startup
     {
@@ -26,24 +25,12 @@ namespace Tasks.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
 
-            services.AddCustomAuth(Configuration);
-            services.AddCustomMediatr();
-            services.AddDependencies();
             services.AddControllers();
-
-            services.AddCustomSwagger(Configuration);
-
-            //add mass transit here
-            services.AddMassTransit(config =>
+            services.AddSwaggerGen(c =>
             {
-                config.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
-                });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Announcement.API", Version = "v1" });
             });
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,11 +39,9 @@ namespace Tasks.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Announcement.API v1"));
             }
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasks.API v1"));
 
             app.UseRouting();
 

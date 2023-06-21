@@ -10,6 +10,9 @@ services:
   userdb:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
+  rabbitmq:
+       image: rabbitmq:3-management-alpine
+
 
   authentication.api:
     image: ${DOCKER_REGISTRY-}authenticationapi
