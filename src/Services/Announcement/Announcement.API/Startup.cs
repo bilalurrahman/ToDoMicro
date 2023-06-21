@@ -1,3 +1,5 @@
+using Annoucement.Infrastructure.Integration;
+using Announcement.Application.Contracts.Integration;
 using Announcement.Application.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
+using Announcement.Application.Features.MessageConsumer;
+using EventsBus.Messages.Common;
 
 namespace Announcement.API
 {
@@ -34,6 +39,24 @@ namespace Announcement.API
             });
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IEmailIntegration, EmailIntegration>();
+
+            //Add Queue Here for masstransit
+
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<NewTaskEmailCreationEventConsumer>();
+                config.UsingRabbitMq((ctx, cfg) => {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+
+                    cfg.ReceiveEndpoint(EventBusConstants.NewTaskEmailCreationQueue, c =>
+                    {
+                        c.ConfigureConsumer<NewTaskEmailCreationEventConsumer>(ctx);
+                    });
+                });
+
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -81,3 +81,13 @@ services:
     ports:
       - "5702:80"
 
+
+  announcement.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:      
+      - rabbitmq
+    ports:
+      - "5703:80"
+
