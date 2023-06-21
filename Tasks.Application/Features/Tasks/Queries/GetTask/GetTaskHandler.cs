@@ -24,7 +24,9 @@ namespace Tasks.Application.Features.Tasks.Queries.GetTask
             //else get from the repo of mongo.
             
             var response = await _tasksQueryRepository.Get(request.Id);
-            
+
+            if (response == null)
+                return new GetTaskResponse();//exception to be thrown here...
 
             return new GetTaskResponse
             {

@@ -23,9 +23,9 @@ namespace Tasks.Infrastructure.Persistance
             return await _context.TasksCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<List<TasksEntity>> GetAll()
+        public async Task<List<TasksEntity>> GetAll(long userId)
         {
-            return await _context.TasksCollection.Find(p => true).ToListAsync();
+            return await _context.TasksCollection.Find(p=> p.userId==userId).ToListAsync();
         }
     }
 }

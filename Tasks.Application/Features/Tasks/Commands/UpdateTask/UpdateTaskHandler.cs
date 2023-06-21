@@ -39,7 +39,8 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
                 isActive = request.isActive,
                 userId = Convert.ToInt64(userId),
                 LastModifiedBy = request.LastModifiedBy,
-                isCompleted = request.isCompleted
+                isCompleted = request.isCompleted,
+                Id = request.Id
             });
 
             return new UpdateTaskResponse

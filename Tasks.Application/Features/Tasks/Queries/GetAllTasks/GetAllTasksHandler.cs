@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,16 @@ namespace Tasks.Application.Features.Tasks.Queries
     public class GetAllTasksHandler : IRequestHandler<GetAllTasksRequest, List<GetAllTasksResponse>>
     {
         private readonly ITasksQueryRepository _tasksQueryRepository;
-        public GetAllTasksHandler(ITasksQueryRepository tasksQueryRepository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public GetAllTasksHandler(ITasksQueryRepository tasksQueryRepository, IHttpContextAccessor httpContextAccessor)
         {
             _tasksQueryRepository = tasksQueryRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<List<GetAllTasksResponse>> Handle(GetAllTasksRequest request, CancellationToken cancellationToken)
         {
-            var resp = await _tasksQueryRepository.GetAll();
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
+            var resp = await _tasksQueryRepository.GetAll(long.Parse(userId));
 
             List<GetAllTasksResponse> getAllTasksResponses = resp.Select(source =>
             new GetAllTasksResponse

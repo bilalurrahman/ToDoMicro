@@ -9,7 +9,7 @@ namespace Tasks.Application.Contracts
 {
    public interface ITasksQueryRepository
     {
-        Task<List<TasksEntity>> GetAll();
+        Task<List<TasksEntity>> GetAll(long userId);
         Task <TasksEntity> Get(string id);
 
         
