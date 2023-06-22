@@ -10,6 +10,7 @@ using Tasks.Application.Contracts;
 using Tasks.Domain.Entities;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using AutoMapper;
 
 namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
@@ -18,39 +19,24 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDistributedCache _distributedCache;
+        private readonly IMapper _mapper;
         public UpdateTaskHandler(ITasksCommandsRepository tasksCommandsRepository,
-            IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache)
+            IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IMapper mapper)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
             _httpContextAccessor = httpContextAccessor;
             _distributedCache = distributedCache;
+            _mapper = mapper;
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
-
-            var taskRequest = new TasksEntity
-            {
-
-                Title = request.Title,
-                Description = request.Description,
-                DueDate = request.DueDate,
-                isPinned = request.isPinned,
-                Status = request.Status,
-                HaveReminder = request.HaveReminder,
-                CreatedDate = DateTime.Now,
-                LastModifiedDate = DateTime.Now,
-                CreatedBy = request.CreatedBy,
-                isActive = request.isActive,
-                userId = Convert.ToInt64(userId),
-                LastModifiedBy = request.LastModifiedBy,
-                isCompleted = request.isCompleted,
-                Id = request.Id
-            };
-            var response = await _tasksCommandsRepository.UpdateTask(taskRequest);
+            var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
+            updateTaskRepoRequest.userId = Convert.ToInt64(userId);
+            var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);
             if (response)
             {
-                await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(taskRequest));
+                await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(updateTaskRepoRequest));
 
             }
             return new UpdateTaskResponse

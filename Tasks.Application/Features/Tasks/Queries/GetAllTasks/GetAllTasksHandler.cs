@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tasks.Application.Contracts;
+using Tasks.Domain.Entities;
 
 namespace Tasks.Application.Features.Tasks.Queries
 {
@@ -23,8 +24,14 @@ namespace Tasks.Application.Features.Tasks.Queries
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
             var resp = await _tasksQueryRepository.GetAll(long.Parse(userId));
+            List<GetAllTasksResponse> getAllTasksResponses = Mapper(resp);
+            return getAllTasksResponses;
 
-            List<GetAllTasksResponse> getAllTasksResponses = resp.Select(source =>
+        }
+
+        private static List<GetAllTasksResponse> Mapper(List<TasksEntity> resp)
+        {
+            return resp.Select(source =>
             new GetAllTasksResponse
             {
                 CreatedBy = source.CreatedBy,
@@ -42,9 +49,6 @@ namespace Tasks.Application.Features.Tasks.Queries
                 userId = source.userId,
                 isCompleted = source.isCompleted
             }).ToList();
-
-            return getAllTasksResponses;
-
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventsBus.Messages.Events.Tasks;
+﻿using AutoMapper;
+using EventsBus.Messages.Events.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -19,53 +20,43 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
         private readonly IBus _ibus;
-        public InsertTasksHandler(ITasksCommandsRepository tasksCommandsRepository, 
-            IHttpContextAccessor httpContextAccessor, IBus ibus)
+        private readonly IMapper _mapper;
+        public InsertTasksHandler(ITasksCommandsRepository tasksCommandsRepository,
+            IHttpContextAccessor httpContextAccessor, IBus ibus, IMapper mapper)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
             _httpContextAccessor = httpContextAccessor;
             _ibus = ibus;
+            _mapper = mapper;
         }
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
-            await _tasksCommandsRepository.CreateTask(new TasksEntity
-            {
 
-                Title = request.Title,
-                Description = request.Description,
-                DueDate = request.DueDate,
-                isPinned = request.isPinned,
-                Status = request.Status,
-                HaveReminder = request.HaveReminder,
-                CreatedDate = DateTime.Now,
-                LastModifiedDate = DateTime.Now,
-                CreatedBy = request.CreatedBy,
-                isActive = request.isActive,
-                userId = Convert.ToInt64(userId),
-                LastModifiedBy = request.LastModifiedBy,
-                isCompleted = request.isCompleted
-            });
-
-            //publish Event Here.
-            //convert mapper.
-            var eventMessage = new NewTaskEmailCreationEvent
-            {
-                userDetails = new userDetails
-                {
-                    userId = int.Parse(userId),                 
-                },
-                dueDate = request.DueDate,
-                description = request.Description,
-                title=request.Title             
-            };
-
-            await _ibus.Publish(eventMessage);
-
+            var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
+            createTaskRepoRequest.userId = Convert.ToInt64(userId);
+            await _tasksCommandsRepository.CreateTask(createTaskRepoRequest);
+            await PublishEvent(request, userId);
 
             return new InsertTasksResponse();
 
 
+        }
+
+        private async Task PublishEvent(InsertTasksRequest request, string userId)
+        {
+            var eventMessage = new NewTaskEmailCreationEvent
+            {
+                userDetails = new userDetails
+                {
+                    userId = int.Parse(userId),
+                },
+                dueDate = request.DueDate,
+                description = request.Description,
+                title = request.Title
+            };
+
+            await _ibus.Publish(eventMessage);
         }
     }
 }

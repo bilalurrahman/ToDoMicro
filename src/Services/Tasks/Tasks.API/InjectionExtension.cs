@@ -127,12 +127,18 @@ namespace Tasks.API
         }
 
 
-        public static IServiceCollection AddCustomCache(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddCustomCache(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
+            return services;
+        }
+        public static IServiceCollection AddCustomMapper(this IServiceCollection services, IConfiguration configuration)
+        {
+            var domain = Assembly.Load(new AssemblyName("Tasks.Application"));
+            services.AddAutoMapper(typeof(Startup).Assembly, domain);
             return services;
         }
     }

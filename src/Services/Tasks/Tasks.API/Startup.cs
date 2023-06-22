@@ -29,7 +29,7 @@ namespace Tasks.API
             services.AddHttpContextAccessor();
 
             services.AddCustomCache(Configuration);
-
+            services.AddCustomMapper(Configuration);
             services.AddCustomAuth(Configuration);
             services.AddCustomMediatr();
             services.AddDependencies();
