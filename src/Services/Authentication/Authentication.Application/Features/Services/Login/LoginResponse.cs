@@ -9,6 +9,7 @@ namespace Authentication.Application.Features.Login
     public class LoginResponse
     {
         public string Token { get; set; }
-        public DateTime Expiry { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiry { get; set; }
     }
 }

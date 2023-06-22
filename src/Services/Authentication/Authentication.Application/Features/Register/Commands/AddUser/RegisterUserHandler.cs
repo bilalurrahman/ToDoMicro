@@ -31,7 +31,7 @@ namespace Authentication.Application.Features.Register.Commands.AddUser
             }
             return new RegisterUserResponse
             {
-                isRegistered = await _userCommandRepository.Insert(new RegisterUser
+                isRegistered = await _userCommandRepository.InsertUser(new RegisterUser
                 {
                     Username = request.Username,
                     Password = Extensions.HashValues(request.Password)

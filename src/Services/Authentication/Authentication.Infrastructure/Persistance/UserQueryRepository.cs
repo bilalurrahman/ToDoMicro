@@ -24,7 +24,7 @@ namespace Authentication.Infrastructure.Persistance
             _configuration = configuration;
             
         }
-        public async Task<RegisterUser> Get(string username)
+        public async Task<RegisterUser> GetUserInfo(string username)
         {
  
                 using (IDbConnection _dbConnection = this.GetQueryConnection())
@@ -45,5 +45,22 @@ namespace Authentication.Infrastructure.Persistance
   
         }
 
+        public async Task<UserToken> GetRefreshToken(string username)
+        {
+            using (IDbConnection _dbConnection = this.GetQueryConnection())
+            {
+                string query = @"SELECT 
+                              [refresh_token]
+                             ,[refresh_token_expiry]                             
+                          FROM [dbo].[Users] with (nolock)
+                          where [username] = @Username";
+
+                var registeredUser = await _dbConnection.QueryFirstOrDefaultAsync<UserToken>(query, new { Username = username });
+
+                return registeredUser;
+
+            }
+
+        }
     }
 }

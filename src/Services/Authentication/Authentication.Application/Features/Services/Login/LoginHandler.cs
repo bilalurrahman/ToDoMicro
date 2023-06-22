@@ -1,4 +1,5 @@
 ﻿using Authentication.Application.Features.Register.Queries.GetUser;
+using Authentication.Application.Features.Token.Command.UpdateRefreshToken;
 using Authentication.Common.Extensions;
 using Authentication.Common.Helpers.JWTHelper;
 using MediatR;
@@ -29,11 +30,16 @@ namespace Authentication.Application.Features.Login
                 var isCorrectPassword = Extensions.VerifyHashedValues(request.password, user.password);
                 if (isCorrectPassword)
                 {
-                    var Response = await _iJWTCreateToken.Generate(request.username, user.Id);
+                    var Response = await _iJWTCreateToken.GenerateToken(request.username, user.Id);
+                    //Save the token here
+                    var updateTokenResponse = await _mediator.Send(new UpdateRefreshTokenRequest {refresh_token=Response.RefreshToken,refresh_token_expiry=Response.RefreshTokenExpiry,Username=request.username});
+                    if (updateTokenResponse == null || !updateTokenResponse.isSuccess)
+                        throw new CommonException("Token Update Error");
                     return new LoginResponse
                     {
                         Token = Response.Token,
-                        Expiry = Response.Expiry
+                        RefreshToken=Response.RefreshToken,
+                        RefreshTokenExpiry = Response.RefreshTokenExpiry
                     };
                 }
             }

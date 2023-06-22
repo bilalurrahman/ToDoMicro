@@ -1,8 +1,9 @@
 ﻿using System;
 
-namespace Authentication.Common.Helpers.JWTHelper
+
+namespace Authentication.Application.Features.Token
 {
-    public class JWTModel
+    public class VerifyRefreshTokenResponse
     {
         public string Token { get; set; }
 
@@ -10,3 +11,4 @@ namespace Authentication.Common.Helpers.JWTHelper
         public DateTime RefreshTokenExpiry { get; set; }
     }
 }
+

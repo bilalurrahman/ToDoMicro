@@ -17,7 +17,7 @@ namespace Authentication.Infrastructure.Persistance
             return new SqlConnection(_configuration.GetValue<string>("DatabaseSettings:UserDBConnection"));
         }
 
-        public async Task<bool> Insert(RegisterUser user)
+        public async Task<bool> InsertUser(RegisterUser user)
         {
             using (IDbConnection _dbConnection = this.GetConnection())
             {
@@ -43,9 +43,31 @@ namespace Authentication.Infrastructure.Persistance
             }
         }
 
-        public Task<bool> Update(RegisterUser user)
+        public Task<bool> UpdateUser(RegisterUser user)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<bool> UpdateRefreshToken(UserToken userToken)
+        {
+            using (IDbConnection _dbConnection = this.GetConnection())
+            {
+                string query = @"UPDATE [dbo].[Users]
+                                   SET 
+		                               [refresh_token] = @refresh_token
+                                      ,[refresh_token_expiry] = @refresh_token_expiry
+                                 WHERE 
+                                       [username]= @username";
+
+                await _dbConnection.ExecuteAsync(query,
+                   new
+                   {
+                       username = userToken.Username,
+                       refresh_token = userToken.refresh_token,
+                       refresh_token_expiry = userToken.refresh_token_expiry
+                   });
+                return true;
+            }
         }
 
         public UserCommandRepository(IConfiguration configuration)

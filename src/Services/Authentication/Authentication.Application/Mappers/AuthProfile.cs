@@ -1,4 +1,8 @@
 ﻿using Authentication.Application.Features.Register.Queries.GetUser;
+using Authentication.Application.Features.Token;
+using Authentication.Application.Features.Token.Command.UpdateRefreshToken;
+using Authentication.Application.Features.Token.Query.GetRefreshToken;
+using Authentication.Common.Helpers.JWTHelper;
 using Authentication.Domain.Entities;
 using AutoMapper;
 using System;
@@ -14,6 +18,9 @@ namespace Authentication.Application.Mappers
         public AuthProfile()
         {
             CreateMap<RegisterUser, GetUserResponse>().ReverseMap();
+            CreateMap<UserToken, GetRefreshTokenResponse>().ReverseMap();
+            CreateMap<UpdateRefreshTokenRequest, UserToken>().ReverseMap();
+            CreateMap<JWTModel, VerifyRefreshTokenResponse>().ReverseMap();
         }
     }
 }

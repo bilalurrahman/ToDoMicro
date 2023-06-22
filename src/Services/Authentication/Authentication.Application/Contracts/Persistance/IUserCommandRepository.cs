@@ -5,8 +5,10 @@ namespace Authentication.Application.Contracts.Persistance
 {
    public interface IUserCommandRepository
     {        
-        Task<bool> Insert(RegisterUser user);
-        Task<bool> Update(RegisterUser user);
+        Task<bool> InsertUser(RegisterUser user);
+        Task<bool> UpdateUser(RegisterUser user);
+
+        Task<bool> UpdateRefreshToken(UserToken userToken);
 
     }
 }

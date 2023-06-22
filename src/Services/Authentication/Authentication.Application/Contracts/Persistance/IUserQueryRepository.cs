@@ -5,6 +5,8 @@ namespace Authentication.Application.Contracts.Persistance
 {
    public interface IUserQueryRepository
     {
-        Task<RegisterUser> Get(string username);       
+        Task<RegisterUser> GetUserInfo(string username);
+
+        Task<UserToken> GetRefreshToken(string username);
     }
 }
