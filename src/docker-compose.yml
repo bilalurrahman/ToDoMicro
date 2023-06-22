@@ -1,6 +1,9 @@
 version: '3.4'
 
 services:
+  distcachedb:
+    image: redis:alpine
+
   tasksdb:
     image: mongo
 

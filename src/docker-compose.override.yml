@@ -43,6 +43,11 @@ services:
       - ./log:/var/opt/mssql/log
       - ./secrets:/var/opt/mssql/secrets
 
+  distcachedb:
+    container_name: distcachedb
+    restart: always
+    ports:
+      - "6379:6379"
 
 
   authentication.api:
@@ -75,9 +80,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "CacheSettings:ConnectionString=distcachedb:6379"
     depends_on:
       - tasksdb
       - rabbitmq
+      - distcachedb
     ports:
       - "5702:80"
 

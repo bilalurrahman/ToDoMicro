@@ -5,29 +5,47 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using Tasks.Application.Contracts;
+using Tasks.Domain.Entities;
 
 namespace Tasks.Application.Features.Tasks.Queries.GetTask
 {
     public class GetTaskHandler : IRequestHandler<GetTaskRequest, GetTaskResponse>
     {
         private readonly ITasksQueryRepository _tasksQueryRepository;
-        public GetTaskHandler(ITasksQueryRepository tasksQueryRepository)
+        private readonly IDistributedCache _distributedCache;
+        public GetTaskHandler(ITasksQueryRepository tasksQueryRepository, 
+            IDistributedCache distributedCache)
         {
             _tasksQueryRepository = tasksQueryRepository;
+            _distributedCache = distributedCache;
         }
         public async Task<GetTaskResponse> Handle(GetTaskRequest request, CancellationToken cancellationToken)
         {
-         
+
             //get from redis if id is there and modifieddate==modifieddate of redis
-            //redisCache
-            //else get from the repo of mongo.
-            
-            var response = await _tasksQueryRepository.Get(request.Id);
+            var cachedData = await _distributedCache.GetStringAsync(request.Id);
+            if (String.IsNullOrEmpty(cachedData))
+            {
+                var response = await _tasksQueryRepository.Get(request.Id);
+                if (response == null)
+                    return new GetTaskResponse();//exception to be thrown here...
 
-            if (response == null)
-                return new GetTaskResponse();//exception to be thrown here...
+                await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(response));
+                return Mapper(response);
+            }
+            else
+            {
+              var response = JsonConvert.DeserializeObject<TasksEntity>(cachedData);
+              return Mapper(response);
+            }
 
+        }
+
+        private static GetTaskResponse Mapper(TasksEntity response)
+        {
             return new GetTaskResponse
             {
                 CreatedBy = response.CreatedBy,
@@ -45,8 +63,6 @@ namespace Tasks.Application.Features.Tasks.Queries.GetTask
                 userId = response.userId,
                 isCompleted = response.isCompleted
             };
-            
-
         }
     }
 }

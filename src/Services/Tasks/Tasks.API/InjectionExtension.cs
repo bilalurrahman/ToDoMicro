@@ -125,6 +125,16 @@ namespace Tasks.API
                 setupAction.RoutePrefix = "swagger/tasks";
             });
         }
+
+
+        public static IServiceCollection AddCustomCache(this IServiceCollection services,IConfiguration configuration)
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetValue<string>("CacheSettings:ConnectionString");
+            });
+            return services;
+        }
     }
 
 }

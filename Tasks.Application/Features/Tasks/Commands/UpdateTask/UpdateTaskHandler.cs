@@ -8,6 +8,8 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Tasks.Application.Contracts;
 using Tasks.Domain.Entities;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
@@ -15,16 +17,19 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
     {
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UpdateTaskHandler(ITasksCommandsRepository tasksCommandsRepository, 
-            IHttpContextAccessor httpContextAccessor)
+        private readonly IDistributedCache _distributedCache;
+        public UpdateTaskHandler(ITasksCommandsRepository tasksCommandsRepository,
+            IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
             _httpContextAccessor = httpContextAccessor;
+            _distributedCache = distributedCache;
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
-            var response = await _tasksCommandsRepository.UpdateTask(new TasksEntity
+
+            var taskRequest = new TasksEntity
             {
 
                 Title = request.Title,
@@ -41,8 +46,13 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
                 LastModifiedBy = request.LastModifiedBy,
                 isCompleted = request.isCompleted,
                 Id = request.Id
-            });
+            };
+            var response = await _tasksCommandsRepository.UpdateTask(taskRequest);
+            if (response)
+            {
+                await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(taskRequest));
 
+            }
             return new UpdateTaskResponse
             {
                 isSuccess = response
