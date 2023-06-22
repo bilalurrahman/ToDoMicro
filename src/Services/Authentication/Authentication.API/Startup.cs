@@ -34,9 +34,9 @@ namespace Authentication.API
             services.AddDependencyInjection(Configuration);
             services.AddSharedKernalDependencies();
             services.AddLocalizationGrpcDependencies(Configuration);
+            services.AddCustomMapper();
 
 
-            
 
 
 

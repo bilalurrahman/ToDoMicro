@@ -101,5 +101,15 @@ namespace Authentication.API
             return services;
         }
 
+        public static IServiceCollection AddCustomMapper(this IServiceCollection services)
+        {
+            var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
+            services.AddAutoMapper(typeof(Startup).Assembly, domain);
+            return services;
+        }
+
+
+
+
     }
 }

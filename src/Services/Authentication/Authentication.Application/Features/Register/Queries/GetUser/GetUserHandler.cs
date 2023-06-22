@@ -1,4 +1,5 @@
 ﻿using Authentication.Application.Contracts.Persistance;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,11 @@ namespace Authentication.Application.Features.Register.Queries.GetUser
     public class GetUserHandler : IRequestHandler<GetUserRequest, GetUserResponse>
     {
         private readonly IUserQueryRepository _userQueryRepository;
-        public GetUserHandler(IUserQueryRepository userQueryRepository)
+        private readonly IMapper _imapper;
+        public GetUserHandler(IUserQueryRepository userQueryRepository, IMapper imapper)
         {
             _userQueryRepository = userQueryRepository;
+            _imapper = imapper;
         }
         public async Task<GetUserResponse> Handle(GetUserRequest request, CancellationToken cancellationToken)
         {
@@ -23,13 +26,8 @@ namespace Authentication.Application.Features.Register.Queries.GetUser
             {
                 return new GetUserResponse();
             }
-            return new GetUserResponse
-            {
-                Id = user.Id,
-                username = user?.Username,
-                password = user?.Password,
-                isActive = (bool)(user?.isActive)
-            };
+
+            return _imapper.Map<GetUserResponse>(user);            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -140,6 +141,18 @@ namespace Tasks.API
             var domain = Assembly.Load(new AssemblyName("Tasks.Application"));
             services.AddAutoMapper(typeof(Startup).Assembly, domain);
             return services;
+        }
+        public static IServiceCollection AddCustomMessagingQueue(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(configuration["EventBusSettings:HostAddress"]);
+                });
+            });
+            return services;
+
         }
     }
 
