@@ -17,6 +17,7 @@ using Localization.Application.Contracts.Services;
 using Localization.Grpc.Protos;
 using Localization.Integration.Persistance;
 using Localization.Integration.Services;
+using Authentication.Application.Models;
 
 namespace Authentication.API
 {
@@ -68,6 +69,7 @@ namespace Authentication.API
         public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JWTTokenSettings>(configuration.GetSection("JWTTokenSettings"));
+            services.Configure<GrpcSettings>(configuration.GetSection("GrpcSettings"));
             return services;
         }
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)

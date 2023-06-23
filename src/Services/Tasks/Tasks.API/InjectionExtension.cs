@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using Tasks.Application.Contracts;
 using Tasks.Application.Contracts.Context;
+using Tasks.Application.Models;
 using Tasks.Infrastructure.Context;
 using Tasks.Infrastructure.Persistance;
 
@@ -132,7 +133,7 @@ namespace Tasks.API
         {
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration.GetValue<string>("CacheSettings:ConnectionString");
+                options.Configuration = configuration.GetValue<string>("CacheDbSettings:ConnectionString");
             });
             return services;
         }
@@ -153,6 +154,16 @@ namespace Tasks.API
             });
             return services;
 
+        }
+        public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<NoSqlDataBaseSettings>(configuration.GetSection("NoSqlDatabaseSettings"));
+            services.Configure<EventBusSettings>(configuration.GetSection("EventBusSettings"));
+            services.Configure<CacheDbSettings>(configuration.GetSection("CacheDbSettings"));
+            services.Configure<JWTTokenSettings>(configuration.GetSection("JWTTokenSettings"));
+
+
+            return services;
         }
     }
 

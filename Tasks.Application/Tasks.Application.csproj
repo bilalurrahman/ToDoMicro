@@ -15,12 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventBus.Action\EventBus.Action.csproj" />
     <ProjectReference Include="..\MessagingQueue.Messages\EventsBus.Messages.csproj" />
     <ProjectReference Include="..\Tasks.Domain\Tasks.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

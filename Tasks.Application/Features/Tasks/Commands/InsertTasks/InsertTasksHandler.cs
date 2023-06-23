@@ -4,9 +4,6 @@ using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tasks.Application.Contracts;
@@ -55,8 +52,9 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
                 description = request.Description,
                 title = request.Title
             };
-
             await _ibus.Publish(eventMessage);
+            //var eventPublisher = new EventPublisher<NewTaskEmailCreationEvent>(_ibus);
+            //await eventPublisher.Publish(eventMessage);
         }
     }
 }
