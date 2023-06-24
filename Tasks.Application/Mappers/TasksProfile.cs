@@ -33,8 +33,9 @@ namespace Tasks.Application.Mappers
             .ForMember(dest => dest.LastModifiedBy, opt => opt.MapFrom(src => src.LastModifiedBy))
             .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.LastModifiedDate))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title));
-
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+            .ForMember(dest => dest.isDeleted, opt => opt.MapFrom(src => src.isDeleted))
+            .ForMember(dest => dest.SubTasks, opt => opt.MapFrom(src => src.SubTasks));
         }
     }
 }

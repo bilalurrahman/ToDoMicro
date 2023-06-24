@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using Tasks.Application.Contracts;
@@ -164,6 +166,23 @@ namespace Tasks.API
 
 
             return services;
+        }
+
+        public static void AddSupportedCultureServices(this IServiceCollection services)
+        {
+            var cultures = new List<CultureInfo>
+            {
+                new CultureInfo("ar-SA"),
+                new CultureInfo("en")
+            };
+            services.AddLocalization();
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    options.DefaultRequestCulture = new RequestCulture("en", "ar-SA");
+                    options.SupportedCultures = cultures;
+                    options.SupportedUICultures = cultures;
+                });
         }
     }
 

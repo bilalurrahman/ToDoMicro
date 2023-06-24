@@ -18,5 +18,7 @@ namespace Tasks.Domain.Common
         public long userId { get; set; }
         public bool isCompleted { get; set; }
 
+        public bool isDeleted { get; set; }
+
     }
 }

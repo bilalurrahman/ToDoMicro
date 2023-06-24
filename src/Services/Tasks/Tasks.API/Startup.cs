@@ -31,6 +31,7 @@ namespace Tasks.API
             services.AddCustomSwagger(Configuration);
             services.AddCustomMessagingQueue(Configuration);
             services.AddCustomConfiguration(Configuration);
+            services.AddSupportedCultureServices();
 
 
 

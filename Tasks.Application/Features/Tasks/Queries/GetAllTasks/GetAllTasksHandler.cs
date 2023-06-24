@@ -27,8 +27,23 @@ namespace Tasks.Application.Features.Tasks.Queries
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
             var resp = await _tasksQueryRepository.GetAll(long.Parse(userId));
-            return _mapper.Map<List<GetAllTasksResponse>>(resp);
+            var filteredResponse = FilteredTasks(resp);
 
-        }       
+            return _mapper.Map<List<GetAllTasksResponse>>(filteredResponse);
+
+        }
+
+        private static List<TasksEntity> FilteredTasks(List<TasksEntity> resp)
+        {
+
+            //Business to get all the tasks that are not deleted
+            return resp.Select(r =>
+            {
+                r.SubTasks = r?.SubTasks?.Where(x => !x.isDeleted).ToList();
+                return r;
+            }).Where(x => !x.isDeleted).ToList();
+
+            
+        }
     }
 }

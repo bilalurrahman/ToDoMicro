@@ -18,6 +18,10 @@ using Localization.Grpc.Protos;
 using Localization.Integration.Persistance;
 using Localization.Integration.Services;
 using Authentication.Application.Models;
+using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 
 namespace Authentication.API
 {
@@ -51,9 +55,9 @@ namespace Authentication.API
 
         public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services, IConfiguration configuration)
         {
-        
+
             services.AddValidatorsFromAssembly(typeof(Application.Features.Login.LoginRequest).GetTypeInfo().Assembly);
-           // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }
@@ -99,7 +103,7 @@ namespace Authentication.API
             services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
             services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
 
-            
+
             return services;
         }
 
@@ -111,7 +115,22 @@ namespace Authentication.API
         }
 
 
-
+        public static void AddSupportedCultureServices(this IServiceCollection services)
+        {
+            var cultures = new List<CultureInfo>
+            {
+                new CultureInfo("ar-SA"),
+                new CultureInfo("en")
+            };
+            services.AddLocalization();
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    options.DefaultRequestCulture = new RequestCulture("en", "ar-SA");
+                    options.SupportedCultures = cultures;
+                    options.SupportedUICultures = cultures;
+                });
+        }
 
     }
 }
