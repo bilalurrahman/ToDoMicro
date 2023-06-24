@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using Tasks.Application.BackgroundJobs.TasksJobs;
 using Tasks.Application.Contracts;
 using Tasks.Application.Contracts.Context;
 using Tasks.Application.Models;
@@ -62,7 +63,7 @@ namespace Tasks.API
             services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
             services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
             services.AddScoped<ITasksContext, TasksContext>();
-
+            services.AddScoped<ITaskJob, TasksJob>();
             return services;
         }
 

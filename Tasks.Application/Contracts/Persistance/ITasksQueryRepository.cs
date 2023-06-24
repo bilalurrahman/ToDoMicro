@@ -12,6 +12,7 @@ namespace Tasks.Application.Contracts
         Task<List<TasksEntity>> GetAll(long userId);
         Task <TasksEntity> Get(string id);
 
-        
+        Task<List<TasksEntity>> GetAllForJob();
+
     }
 }

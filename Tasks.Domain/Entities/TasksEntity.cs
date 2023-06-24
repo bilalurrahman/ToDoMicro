@@ -17,7 +17,7 @@ namespace Tasks.Domain.Entities
         public bool HaveReminder { get; set; }
 
         public bool isPinned { get; set; }
-
+        public bool isNotifiedForDue { get; set; }
         public List<SubTasks> SubTasks { get; set; }
     }
 }
