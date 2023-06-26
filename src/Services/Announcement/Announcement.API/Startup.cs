@@ -46,12 +46,18 @@ namespace Announcement.API
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<NewTaskEmailCreationEventConsumer>();
+                config.AddConsumer<DueDateNotificationEventConsumer>();
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(Configuration["EventBusSettings:HostAddress"]);
 
                     cfg.ReceiveEndpoint(EventBusConstants.NewTaskEmailCreationQueue, c =>
                     {
                         c.ConfigureConsumer<NewTaskEmailCreationEventConsumer>(ctx);
+                    });
+
+                    cfg.ReceiveEndpoint(EventBusConstants.DueDateNotificationQueue, c =>
+                    {
+                        c.ConfigureConsumer<DueDateNotificationEventConsumer>(ctx);
                     });
                 });
 

@@ -8,18 +8,18 @@ namespace EventsBus.Messages.Events
 {
     public class BaseEvent
     {
-        public Guid Id { get; private set; }
-        public DateTime CreationDate { get; set; }
+        public Guid EventId { get; private set; }
+        public DateTime EventCreationDate { get; set; }
 
         public BaseEvent()
         {
-            Id = Guid.NewGuid();
-            CreationDate = DateTime.UtcNow;
+            EventId = Guid.NewGuid();
+            EventCreationDate = DateTime.UtcNow;
         }
         public BaseEvent(Guid id, DateTime creationDate)
         {
-            Id = id;
-            CreationDate = creationDate;
+            EventId = id;
+            EventCreationDate = creationDate;
         }
     }
 }

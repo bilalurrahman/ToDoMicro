@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using EventsBus.Messages.Common;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SharedKernal.Common.HttpContextHelper;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,7 @@ using System.Text;
 using Tasks.Application.BackgroundJobs.TasksJobs;
 using Tasks.Application.Contracts;
 using Tasks.Application.Contracts.Context;
+using Tasks.Application.MessageConsumer;
 using Tasks.Application.Models;
 using Tasks.Infrastructure.Context;
 using Tasks.Infrastructure.Persistance;
@@ -60,6 +63,8 @@ namespace Tasks.API
 
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
+
+            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
             services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
             services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
             services.AddScoped<ITasksContext, TasksContext>();
@@ -150,10 +155,20 @@ namespace Tasks.API
         {
             services.AddMassTransit(config =>
             {
+                config.AddConsumer<UpdateDueDateEventConsumer>();
+
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(configuration["EventBusSettings:HostAddress"]);
+
+                    cfg.ReceiveEndpoint(EventBusConstants.DueDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateDueDateEventConsumer>(ctx);
+                    });
+
                 });
+                
+
             });
             return services;
 
@@ -180,7 +195,7 @@ namespace Tasks.API
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {
-                    options.DefaultRequestCulture = new RequestCulture("en", "ar-SA");
+                    options.DefaultRequestCulture = new RequestCulture("en");
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;
                 });

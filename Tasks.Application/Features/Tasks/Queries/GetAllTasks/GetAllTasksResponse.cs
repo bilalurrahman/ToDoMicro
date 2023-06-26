@@ -20,6 +20,8 @@ namespace Tasks.Application.Features.Tasks.Queries
 
         public bool isPinned { get; set; }
 
+        public bool isNotifiedForDue { get; set; }
+
         public List<SubTasks> SubTasks { get; set; }
     }
 }

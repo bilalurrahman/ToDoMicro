@@ -30,7 +30,7 @@ namespace Tasks.Infrastructure.Persistance
 
         public async Task<List<TasksEntity>> GetAllForJob()
         {
-            return await _context.TasksCollection.Find(p => !p.isCompleted && p.isActive && p.DueDate<DateTime.Now && !p.isNotifiedForDue).ToListAsync();
+            return await _context.TasksCollection.Find(p => p.isCompleted==false && p.isActive && p.DueDate<DateTime.Now && !p.isNotifiedForDue).ToListAsync();
         }
     }
 }
