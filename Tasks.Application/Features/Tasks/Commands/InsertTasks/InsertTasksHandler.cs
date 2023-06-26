@@ -3,6 +3,7 @@ using EventsBus.Messages.Events.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using SharedKernal.Common.HttpContextHelper;
 using System;
 using System.Linq;
 using System.Threading;
@@ -15,21 +16,21 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
     public class InsertTasksHandler : IRequestHandler<InsertTasksRequest, InsertTasksResponse>
     {
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextHelper _httpContextHelper;
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
         private readonly IBus _ibus;
         private readonly IMapper _mapper;
         public InsertTasksHandler(ITasksCommandsRepository tasksCommandsRepository,
-            IHttpContextAccessor httpContextAccessor, IBus ibus, IMapper mapper)
+            IHttpContextHelper httpContextHelper, IBus ibus, IMapper mapper)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _httpContextHelper = httpContextHelper;
             _ibus = ibus;
             _mapper = mapper;
         }
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
+            var userId = _httpContextHelper.CurrentLoggedInId;
 
             var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             createTaskRepoRequest.userId = Convert.ToInt64(userId);

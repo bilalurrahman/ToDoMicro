@@ -11,26 +11,34 @@ using Tasks.Domain.Entities;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using AutoMapper;
+using SharedKernal.Common.HttpContextHelper;
 
 namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
     public class UpdateTaskHandler : IRequestHandler<UpdateTaskRequest, UpdateTaskResponse>
     {
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextHelper _httpContextHelper;
         private readonly IDistributedCache _distributedCache;
         private readonly IMapper _mapper;
         public UpdateTaskHandler(ITasksCommandsRepository tasksCommandsRepository,
-            IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IMapper mapper)
+             IDistributedCache distributedCache, IMapper mapper, 
+             IHttpContextHelper httpContextHelper)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
-            _httpContextAccessor = httpContextAccessor;
+            
             _distributedCache = distributedCache;
             _mapper = mapper;
+            _httpContextHelper = httpContextHelper;
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId").Value;
+            var currentLanguage = _httpContextHelper.CurrentLocalization;
+
+            var userId = (request.userId > 0) ? request.userId.ToString()
+                : _httpContextHelper.CurrentLoggedInId;
+
+
             var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             updateTaskRepoRequest.userId = Convert.ToInt64(userId);
             var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);

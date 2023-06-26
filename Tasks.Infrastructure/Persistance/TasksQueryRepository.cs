@@ -27,5 +27,10 @@ namespace Tasks.Infrastructure.Persistance
         {
             return await _context.TasksCollection.Find(p=> p.userId==userId).ToListAsync();
         }
+
+        public async Task<List<TasksEntity>> GetAllForJob()
+        {
+            return await _context.TasksCollection.Find(p => p.isCompleted==false && p.isActive && p.DueDate<DateTime.Now && !p.isNotifiedForDue).ToListAsync();
+        }
     }
 }

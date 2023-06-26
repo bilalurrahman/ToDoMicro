@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventBus.Action\EventBus.Action.csproj" />
     <ProjectReference Include="..\MessagingQueue.Messages\EventsBus.Messages.csproj" />
+    <ProjectReference Include="..\src\Services\Shared\Shared\SharedKernal.csproj" />
     <ProjectReference Include="..\Tasks.Domain\Tasks.Domain.csproj" />
   </ItemGroup>
 
