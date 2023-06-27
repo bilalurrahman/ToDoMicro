@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using SharedKernal;
 using SharedKernal.GrpcServices;
 using SharedKernal.Middlewares.ExceptionHandlers;
+using Serilog;
 
 namespace Authentication.API
 {
@@ -69,7 +70,7 @@ namespace Authentication.API
 
             app.UseRouting();
             // Add Middleware
-            
+            app.UseSerilogRequestLogging();
 
             app.UseAuthentication();
             app.UseAuthorization();

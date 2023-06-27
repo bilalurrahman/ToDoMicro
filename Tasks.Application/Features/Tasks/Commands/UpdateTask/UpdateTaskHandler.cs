@@ -33,7 +33,7 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
-            var currentLanguage = _httpContextHelper.CurrentLocalization;
+         //   var currentLanguage = _httpContextHelper.CurrentLocalization;
 
             var userId = (request.userId > 0) ? request.userId.ToString()
                 : _httpContextHelper.CurrentLoggedInId;

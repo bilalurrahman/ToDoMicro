@@ -16,6 +16,9 @@ services:
   rabbitmq:
        image: rabbitmq:3-management-alpine
 
+  seq:
+    image: datalust/seq:latest
+
 
   authentication.api:
     image: ${DOCKER_REGISTRY-}authenticationapi
