@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SharedKernal.Common.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
    public  class CustomGlobalExceptionHandler
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<CustomGlobalExceptionHandler> _logger;
 
-        public CustomGlobalExceptionHandler(RequestDelegate next)
+        public CustomGlobalExceptionHandler(RequestDelegate next, ILogger<CustomGlobalExceptionHandler> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke (HttpContext context)
@@ -35,8 +38,7 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
         {
             HttpStatusCode status;
             ApiError error = new ApiError();            
-            
-            //var exceptionType = ex.GetType();
+                        
 
             switch (exception)
             {
@@ -52,18 +54,23 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
                     error.ErrorCode = ex.ErrorEvent.Id;
                     error.ErrorMessage = ex.ErrorEvent.Name;
                     error.StackTrace = ex.StackTrace;
+                    _logger.LogError(exception, "Entity Not Found Error: " + exception.InnerException 
+                        + "with {ErrorId}", error.Id);
                     break;
                 case CommonException ex:
                     error.Status = (int)HttpStatusCode.InternalServerError;
                     error.ErrorCode = ex.ErrorEvent.Id;
                     error.ErrorMessage = ex.ErrorEvent.Name;
                     error.StackTrace = ex.StackTrace;
+
                     break;
 
                 default:
                     error.Status = (int)HttpStatusCode.InternalServerError;
                     error.StackTrace = exception.StackTrace;
                     error.ErrorMessage = exception.Message;
+
+                    _logger.LogError(exception, "Error: " + exception.InnerException + "with {ErrorId}", error.Id);
                     break;
             }
 

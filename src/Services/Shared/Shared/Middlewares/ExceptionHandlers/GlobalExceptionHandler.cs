@@ -9,6 +9,7 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
 {
     public static class GlobalExceptionHandler
     {
-        public static IApplicationBuilder AddGlobalExceptionHandler(this IApplicationBuilder applicationBuilder) => applicationBuilder.UseMiddleware<CustomGlobalExceptionHandler>();
+        public static IApplicationBuilder AddGlobalExceptionHandler(this IApplicationBuilder applicationBuilder) 
+            => applicationBuilder.UseMiddleware<CustomGlobalExceptionHandler>();
     }
 }
