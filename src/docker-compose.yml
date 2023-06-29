@@ -50,10 +50,17 @@ services:
       context: .
       dockerfile: Services/Tasks/Tasks.Job/Dockerfile
 
+  pomodoros.api:
+    image: ${DOCKER_REGISTRY-}pomodorosapi
+    build:
+      context: .
+      dockerfile: Services/Pomodoros/Pomodoros.API/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
   mongo_data:
+
 
 
 

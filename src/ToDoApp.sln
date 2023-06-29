@@ -45,19 +45,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasks.Infrastructure", "..\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessagingQueue", "MessagingQueue", "{72AE8530-03D1-44B3-9E70-16A0912DB44A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsBus.Messages", "..\MessagingQueue.Messages\EventsBus.Messages.csproj", "{5F630F3A-917E-4E6A-8905-75126EEBE7D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsBus.Messages", "..\MessagingQueue.Messages\EventsBus.Messages.csproj", "{5F630F3A-917E-4E6A-8905-75126EEBE7D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Announcement", "Announcement", "{FF35ACA7-2CE3-47DC-A55B-2A364A733CA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcement.API", "Services\Announcement\Announcement.API\Announcement.API.csproj", "{207DEFF0-F217-4E7E-B0EE-4A9D90E847D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.API", "Services\Announcement\Announcement.API\Announcement.API.csproj", "{207DEFF0-F217-4E7E-B0EE-4A9D90E847D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcement.Application", "Services\Announcement\Announcement.Application\Announcement.Application.csproj", "{B3564F64-1AAE-4402-A85F-DFBE7CEC5B9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.Application", "Services\Announcement\Announcement.Application\Announcement.Application.csproj", "{B3564F64-1AAE-4402-A85F-DFBE7CEC5B9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annoucement.Infrastructure", "Services\Announcement\Annoucement.Integration\Annoucement.Infrastructure.csproj", "{EEE60D01-A11B-4C0D-B85A-6988739A38C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Annoucement.Infrastructure", "Services\Announcement\Annoucement.Integration\Annoucement.Infrastructure.csproj", "{EEE60D01-A11B-4C0D-B85A-6988739A38C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Action", "..\EventBus.Action\EventBus.Action.csproj", "{B1CC9E49-A677-4366-A786-F0193930CCEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Action", "..\EventBus.Action\EventBus.Action.csproj", "{B1CC9E49-A677-4366-A786-F0193930CCEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks.Job", "Services\Tasks\Tasks.Job\Tasks.Job.csproj", "{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasks.Job", "Services\Tasks\Tasks.Job\Tasks.Job.csproj", "{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pomodoros", "Pomodoros", "{323C60E0-29C2-45BC-9146-D9190DEDED92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.API", "Services\Pomodoros\Pomodoros.API\Pomodoros.API.csproj", "{6C70D270-DD38-4F2C-8E74-2C908DE64834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Application", "Services\Pomodoros\Pomodoros.Application\Pomodoros.Application.csproj", "{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Domain", "Services\Pomodoros\Pomodoros.Domain\Pomodoros.Domain.csproj", "{5287A73A-845D-4C4C-B26E-02BB8E371088}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Infrastructure", "Services\Pomodoros\Pomodoros.Infrastructure\Pomodoros.Infrastructure.csproj", "{5CFFE6E8-CD48-402D-B799-642B897E7283}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +159,22 @@ Global
 		{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C70D270-DD38-4F2C-8E74-2C908DE64834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C70D270-DD38-4F2C-8E74-2C908DE64834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C70D270-DD38-4F2C-8E74-2C908DE64834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C70D270-DD38-4F2C-8E74-2C908DE64834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5287A73A-845D-4C4C-B26E-02BB8E371088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5287A73A-845D-4C4C-B26E-02BB8E371088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5287A73A-845D-4C4C-B26E-02BB8E371088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5287A73A-845D-4C4C-B26E-02BB8E371088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +206,11 @@ Global
 		{EEE60D01-A11B-4C0D-B85A-6988739A38C7} = {FF35ACA7-2CE3-47DC-A55B-2A364A733CA3}
 		{B1CC9E49-A677-4366-A786-F0193930CCEF} = {72AE8530-03D1-44B3-9E70-16A0912DB44A}
 		{F4148AAE-4F3D-4892-B6F5-5EA9232B8BF3} = {517063FF-B028-44CC-8677-2E36024D61A8}
+		{323C60E0-29C2-45BC-9146-D9190DEDED92} = {312F4859-A42E-4462-972E-9D1AA8FD815F}
+		{6C70D270-DD38-4F2C-8E74-2C908DE64834} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
+		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
+		{5287A73A-845D-4C4C-B26E-02BB8E371088} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
+		{5CFFE6E8-CD48-402D-B799-642B897E7283} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {731805E9-6E70-491C-BA20-47DC8B87829C}
