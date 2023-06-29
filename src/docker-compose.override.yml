@@ -68,7 +68,7 @@ services:
     depends_on:
       - userdb
     ports:
-      - "5700:80"
+      - "5800:80"
 
 
 
@@ -116,4 +116,14 @@ services:
       - userdb
     ports:
       - "5704:80"
+
+
+  pomodoros.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
+    depends_on:
+      - tasksdb
+    ports:
+      - "5705:80"
 

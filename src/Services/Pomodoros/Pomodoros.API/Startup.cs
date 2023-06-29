@@ -6,10 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pomodoros.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using MediatR;
+using AutoMapper;
+using Pomodoros.Infrastructure.Persistance.Query;
+using Pomodoros.Application.Contracts.Persistance.Query;
+using Pomodoros.Application.Contracts.Persistance.Command;
+using Pomodoros.Infrastructure.Persistance.Command;
+using Pomodoros.Application.Contracts.Context;
+using Pomodoros.Infrastructure.Context;
 
 namespace Pomodoros.API
 {
@@ -25,6 +35,14 @@ namespace Pomodoros.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var domain = Assembly.Load(new AssemblyName("Pomodoros.Application"));
+            services.AddMediatR(typeof(Startup).Assembly, domain);
+            services.AddAutoMapper(typeof(Startup).Assembly, domain);
+            services.Configure<NoSqlDataBaseSettings>(Configuration.GetSection("NoSqlDatabaseSettings"));
+            services.AddScoped<ICommandPomodorosRepository, CommandPomodorosRepository>();
+            services.AddScoped<IQueryPomodorosRepository, QueryPomodorosRepository>();
+            services.AddScoped<IPomodoroContext, PomodoroContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

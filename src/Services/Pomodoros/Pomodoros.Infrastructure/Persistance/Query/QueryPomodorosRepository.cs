@@ -20,7 +20,7 @@ namespace Pomodoros.Infrastructure.Persistance.Query
         }
         public async Task<PomodorosEntity> Get(string Id)
         {
-            return await _context.PomodorosCollection.Find(p => p.Id == Id).FirstOrDefaultAsync();
+            return await _context.PomodorosCollection.Find(p => p.Id == Id).SingleOrDefaultAsync();
         }
 
         public async Task<List<PomodorosEntity>> GetAll(string TaskId)
