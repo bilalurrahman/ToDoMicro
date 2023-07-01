@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\SharedKernal.Core\SharedKernal.Core.csproj" />
     <ProjectReference Include="..\Pomodoros.Domain\Pomodoros.Domain.csproj" />
   </ItemGroup>
 

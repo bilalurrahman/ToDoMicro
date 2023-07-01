@@ -8,6 +8,6 @@ namespace Pomodoros.Application.Features.Pomodoros.Commad.Insert
 {
     public class InsertPomodoroResponse
     {
-        public bool isSuccess { get; set; }
+        public string Id { get; set; }
     }
 }

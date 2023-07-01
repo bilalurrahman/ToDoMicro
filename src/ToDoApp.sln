@@ -61,13 +61,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasks.Job", "Services\Tasks
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pomodoros", "Pomodoros", "{323C60E0-29C2-45BC-9146-D9190DEDED92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.API", "Services\Pomodoros\Pomodoros.API\Pomodoros.API.csproj", "{6C70D270-DD38-4F2C-8E74-2C908DE64834}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomodoros.API", "Services\Pomodoros\Pomodoros.API\Pomodoros.API.csproj", "{6C70D270-DD38-4F2C-8E74-2C908DE64834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Application", "Services\Pomodoros\Pomodoros.Application\Pomodoros.Application.csproj", "{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomodoros.Application", "Services\Pomodoros\Pomodoros.Application\Pomodoros.Application.csproj", "{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Domain", "Services\Pomodoros\Pomodoros.Domain\Pomodoros.Domain.csproj", "{5287A73A-845D-4C4C-B26E-02BB8E371088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomodoros.Domain", "Services\Pomodoros\Pomodoros.Domain\Pomodoros.Domain.csproj", "{5287A73A-845D-4C4C-B26E-02BB8E371088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomodoros.Infrastructure", "Services\Pomodoros\Pomodoros.Infrastructure\Pomodoros.Infrastructure.csproj", "{5CFFE6E8-CD48-402D-B799-642B897E7283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomodoros.Infrastructure", "Services\Pomodoros\Pomodoros.Infrastructure\Pomodoros.Infrastructure.csproj", "{5CFFE6E8-CD48-402D-B799-642B897E7283}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernal.Infrastructure", "Services\Shared\SharedKernal.Infrastructure\SharedKernal.Infrastructure.csproj", "{0F904477-B09F-44D9-A0CF-F8077CC7BAA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernal.Core", "Services\Shared\SharedKernal.Core\SharedKernal.Core.csproj", "{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,6 +179,14 @@ Global
 		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CFFE6E8-CD48-402D-B799-642B897E7283}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F904477-B09F-44D9-A0CF-F8077CC7BAA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F904477-B09F-44D9-A0CF-F8077CC7BAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F904477-B09F-44D9-A0CF-F8077CC7BAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F904477-B09F-44D9-A0CF-F8077CC7BAA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,6 +223,8 @@ Global
 		{8FC33848-C33A-4EA4-9CD4-92A3CE7A43E0} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
 		{5287A73A-845D-4C4C-B26E-02BB8E371088} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
 		{5CFFE6E8-CD48-402D-B799-642B897E7283} = {323C60E0-29C2-45BC-9146-D9190DEDED92}
+		{0F904477-B09F-44D9-A0CF-F8077CC7BAA1} = {460A54E1-1F07-44AD-AFB7-24795BA1C844}
+		{0C1CC79F-B714-4DE7-87A2-ED1DC21DB5DE} = {460A54E1-1F07-44AD-AFB7-24795BA1C844}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {731805E9-6E70-491C-BA20-47DC8B87829C}

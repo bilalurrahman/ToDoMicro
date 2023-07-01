@@ -20,6 +20,8 @@ using Pomodoros.Application.Contracts.Persistance.Command;
 using Pomodoros.Infrastructure.Persistance.Command;
 using Pomodoros.Application.Contracts.Context;
 using Pomodoros.Infrastructure.Context;
+using SharedKernal.Core.Interfaces.AppSettings;
+using SharedKernal.Infrastructure.Persistance.AppSettings;
 
 namespace Pomodoros.API
 {
@@ -43,6 +45,7 @@ namespace Pomodoros.API
             services.AddScoped<ICommandPomodorosRepository, CommandPomodorosRepository>();
             services.AddScoped<IQueryPomodorosRepository, QueryPomodorosRepository>();
             services.AddScoped<IPomodoroContext, PomodoroContext>();
+            services.AddSingleton<IAppSettingsQueryRepository, AppSettingsQueryRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

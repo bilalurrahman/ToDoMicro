@@ -19,9 +19,10 @@ namespace Pomodoros.Infrastructure.Persistance.Command
             _context = context;
         }
 
-        public async Task Add(PomodorosEntity entity)
+        public async Task<string> Add(PomodorosEntity entity)
         {
             await _context.PomodorosCollection.InsertOneAsync(entity);
+            return entity.Id;
         }
 
         public async Task<bool> Update(PomodorosEntity entity)

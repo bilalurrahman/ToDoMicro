@@ -9,7 +9,7 @@ namespace Pomodoros.Application.Contracts.Persistance.Command
 {
     public interface ICommandPomodorosRepository
     {
-        Task Add(PomodorosEntity entity);
+        Task<string> Add(PomodorosEntity entity);
         Task<bool> Update(PomodorosEntity entity);
     }
 }

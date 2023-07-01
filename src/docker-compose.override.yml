@@ -121,9 +121,11 @@ services:
   pomodoros.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
+      - "NoSqlDatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
+      - "DatabaseSettings:AppSettingsDBConnection=Server=userdb;Database=AppSettingsDb;User Id=sa;Password=SwN12345678;TrustServerCertificate=True"
     depends_on:
       - tasksdb
+      - userdb
     ports:
       - "5705:80"
 
