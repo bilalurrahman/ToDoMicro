@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Serilog;
+using SharedKernal;
+using SharedKernal.Middlewares.ExceptionHandlers;
 
 namespace Tasks.API
 {
@@ -27,14 +29,15 @@ namespace Tasks.API
             services.AddCustomMediatr();
             services.AddDependencies();
             services.AddControllers();
-
+            services.AddSharedKernalDependencies();
+            services.AddLocalizationGrpcDependencies(Configuration);
             services.AddCustomSwagger(Configuration);
             services.AddCustomMessagingQueue(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddSupportedCultureServices();
 
 
-
+            ContainerManager.Container = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,12 +48,12 @@ namespace Tasks.API
                 app.UseDeveloperExceptionPage();
                 
             }
-
+            app.AddGlobalExceptionHandler();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasks.API v1"));
 
             app.UseRouting();
-
+            app.UseSerilogRequestLogging();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

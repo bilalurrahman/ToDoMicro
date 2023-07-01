@@ -8,6 +8,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using SharedKernal.Common.Exceptions;
 using Tasks.Application.Contracts;
 using Tasks.Domain.Entities;
 
@@ -38,7 +39,8 @@ namespace Tasks.Application.Features.Tasks.Queries.GetTask
             {
                 response = await _tasksQueryRepository.Get(request.Id);
                 if (response == null)
-                    return new GetTaskResponse();//exception to be thrown here...
+                    throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Id,
+                        LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Name);
 
                 await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(response));
 

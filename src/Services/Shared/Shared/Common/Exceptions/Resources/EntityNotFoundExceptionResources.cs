@@ -9,5 +9,6 @@ namespace SharedKernal.Common.Exceptions.Resources
     class EntityNotFoundExceptionResources:Resources
     {
         public static string IncorrectUserName => GetResources("UserNotFound");
+        public static string TaskIdNotFound => GetResources("TaskIdNotFound");
     }
 }

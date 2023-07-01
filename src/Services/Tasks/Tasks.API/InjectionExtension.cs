@@ -9,6 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SharedKernal.Common.HttpContextHelper;
+using SharedKernal.GrpcServices;
+using Localization.Application.Contracts.Persistance;
+using Localization.Application.Contracts.Services;
+using Localization.Grpc.Protos;
+using Localization.Integration.Persistance;
+using Localization.Integration.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
@@ -74,10 +80,17 @@ namespace Tasks.API
 
         public static IServiceCollection AddSharedKernalDependencies(this IServiceCollection services)
         {
+            services.AddScoped<LocalizationGrpcServices>();
             return services;
+           
         }
-        public static IServiceCollection AddLocalizationGrpcDependencies(this IServiceCollection services)
+        public static IServiceCollection AddLocalizationGrpcDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddGrpcClient<LocalizationProtoService.LocalizationProtoServiceClient>
+                 (o => o.Address = new Uri(configuration["GrpcSettings:LocalizationUrl"]));
+
+            services.AddSingleton<ILocalizationCacheServices, LocalizationCacheService>();
+            services.AddSingleton<ILocalizationQueryRepository, LocalizationQueryRepository>();
             return services;
         }
 

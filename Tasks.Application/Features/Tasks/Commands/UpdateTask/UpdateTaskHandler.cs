@@ -12,6 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using AutoMapper;
 using SharedKernal.Common.HttpContextHelper;
+using SharedKernal.Common.Exceptions;
 
 namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
@@ -33,20 +34,24 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
-         //   var currentLanguage = _httpContextHelper.CurrentLocalization;
 
             var userId = (request.userId > 0) ? request.userId.ToString()
                 : _httpContextHelper.CurrentLoggedInId;
+
+            if (string.IsNullOrEmpty(request?.Title))
+                throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Id, LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Name);
 
 
             var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             updateTaskRepoRequest.userId = Convert.ToInt64(userId);
             var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);
-            if (response)
-            {
-                await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(updateTaskRepoRequest));
+            if (!response)
+                throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Id,
+                       LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Name);
 
-            }
+            await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(updateTaskRepoRequest));
+
+            
             return new UpdateTaskResponse
             {
                 isSuccess = response

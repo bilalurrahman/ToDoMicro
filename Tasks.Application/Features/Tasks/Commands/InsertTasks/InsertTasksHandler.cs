@@ -3,6 +3,7 @@ using EventsBus.Messages.Events.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using SharedKernal.Common.Exceptions;
 using SharedKernal.Common.HttpContextHelper;
 using System;
 using System.Linq;
@@ -31,6 +32,10 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextHelper.CurrentLoggedInId;
+            if(string.IsNullOrEmpty(request?.Title))
+                throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Id, LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Name);
+
+
 
             var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             createTaskRepoRequest.userId = Convert.ToInt64(userId);

@@ -90,6 +90,7 @@ services:
       - "DatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "CacheSettings:ConnectionString=distcachedb:6379"
+      - "GrpcSettings:LocalizationUrl=localization.grpc"
     depends_on:
       - tasksdb
       - rabbitmq

@@ -47,7 +47,9 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
                     error.ErrorCode = ex.ErrorEvent.Id;
                     error.ErrorMessage = ex.ErrorEvent.Name;
                     error.StackTrace = ex.StackTrace;
-                    
+                    _logger.LogError(exception, "Business Error: " + exception.InnerException
+                        + "with {ErrorId}", error.Id);
+
                     break;
                 case EntityNotFoundException ex:
                     error.Status = (int)HttpStatusCode.NotFound;

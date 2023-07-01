@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using SharedKernal.Common.Exceptions;
 using Tasks.Application.Contracts;
 
 namespace Tasks.Application.Features.Tasks.Commands.DeleteTask
@@ -24,7 +25,10 @@ namespace Tasks.Application.Features.Tasks.Commands.DeleteTask
         {
 
             var response = await _tasksCommandsRepository.DeleteTask(request.Id);
-            if(response) await _distributedCache.RemoveAsync(request.Id);
+            if(!response)
+                throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Id,
+                       LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Name);
+            await _distributedCache.RemoveAsync(request.Id);
             return new DeleteTaskResponse
             {
                 isSuccess = response
