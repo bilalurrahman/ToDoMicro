@@ -11,6 +11,7 @@ using SharedKernal;
 using SharedKernal.GrpcServices;
 using SharedKernal.Middlewares.ExceptionHandlers;
 using Serilog;
+using SharedKernal.Middlewares.Logging;
 
 namespace Authentication.API
 {
@@ -66,15 +67,20 @@ namespace Authentication.API
             }
 
             app.AddGlobalExceptionHandler();
+           
             app.UseHttpsRedirection();
 
             app.UseRouting();
             // Add Middleware
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(
+                options=>
+                {
+                    options.EnrichDiagnosticContext = Enricher.HttpRequestEnricher;
+                });
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+        //    app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
