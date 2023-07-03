@@ -14,8 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Localization\Localization.Core\Localization.Application.csproj" />
+    <ProjectReference Include="..\..\Localization\Localization.Integration\Localization.Integration.csproj" />
     <ProjectReference Include="..\..\Shared\SharedKernal.Core\SharedKernal.Core.csproj" />
     <ProjectReference Include="..\..\Shared\SharedKernal.Infrastructure\SharedKernal.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared\SharedKernal.csproj" />
     <ProjectReference Include="..\Pomodoros.Application\Pomodoros.Application.csproj" />
     <ProjectReference Include="..\Pomodoros.Infrastructure\Pomodoros.Infrastructure.csproj" />
   </ItemGroup>

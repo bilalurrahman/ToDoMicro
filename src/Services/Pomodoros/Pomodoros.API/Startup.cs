@@ -22,6 +22,7 @@ using Pomodoros.Application.Contracts.Context;
 using Pomodoros.Infrastructure.Context;
 using SharedKernal.Core.Interfaces.AppSettings;
 using SharedKernal.Infrastructure.Persistance.AppSettings;
+using SharedKernal;
 
 namespace Pomodoros.API
 {
@@ -37,21 +38,33 @@ namespace Pomodoros.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
 
-            var domain = Assembly.Load(new AssemblyName("Pomodoros.Application"));
-            services.AddMediatR(typeof(Startup).Assembly, domain);
-            services.AddAutoMapper(typeof(Startup).Assembly, domain);
-            services.Configure<NoSqlDataBaseSettings>(Configuration.GetSection("NoSqlDatabaseSettings"));
-            services.AddScoped<ICommandPomodorosRepository, CommandPomodorosRepository>();
-            services.AddScoped<IQueryPomodorosRepository, QueryPomodorosRepository>();
-            services.AddScoped<IPomodoroContext, PomodoroContext>();
-            services.AddSingleton<IAppSettingsQueryRepository, AppSettingsQueryRepository>();
+           // services.AddCustomCache(Configuration);
+            services.AddCustomMapper(Configuration);
+            services.AddCustomAuth(Configuration);
+            services.AddCustomMediatr();
+            services.AddDependencies();
+            services.AddControllers();
+            services.AddSharedKernalDependencies();
+            services.AddLocalizationGrpcDependencies(Configuration);
+            services.AddCustomSwagger(Configuration);
+            services.AddCustomMessagingQueue(Configuration);
+            services.AddCustomConfiguration(Configuration);
+            services.AddSupportedCultureServices();
+
+
+            ContainerManager.Container = services.BuildServiceProvider();
+
+
+
+
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pomodoros.API", Version = "v1" });
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pomodoros.API", Version = "v1" });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,9 +73,9 @@ namespace Pomodoros.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pomodoros.API v1"));
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pomodoros.API v1"));
 
             app.UseRouting();
 

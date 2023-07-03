@@ -17,7 +17,7 @@ namespace Pomodoros.API.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PomodoroController : ControllerBase
     {
         private readonly IMediator _mediator;
