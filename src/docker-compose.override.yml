@@ -130,3 +130,12 @@ services:
     ports:
       - "5705:80"
 
+
+  apigw:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+       - authentication.api    
+    ports:
+      - "5710:80"
+
