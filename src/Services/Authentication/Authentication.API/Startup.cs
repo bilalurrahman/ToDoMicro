@@ -80,7 +80,8 @@ namespace Authentication.API
 
 
             app.AddGlobalExceptionHandler();
-           
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

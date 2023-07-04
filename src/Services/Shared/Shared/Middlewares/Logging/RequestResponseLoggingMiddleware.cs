@@ -20,49 +20,62 @@ public class RequestResponseLoggingMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        //var originalBodyStream = context.Response.Body;
-        //var request = await GetRequestAsTextAsync(context.Request);
+        var request = context.Request;
+        var requestDetails = $"Request: {request.Method} {request.Path}{request.QueryString}";
 
-        //_logger.LogInformation(request);
+        //_logger.LogInformation(requestDetails);
 
-        //await using var responseBody = new MemoryStream();
-        //context.Response.Body = responseBody;
-        //await _next(context);
-
-        //var response = await GetResponseAsTextAsync(context.Response);
-        //_logger.LogInformation(response);
-
-        //await responseBody.CopyToAsync(originalBodyStream);
-
-        var orignalBodyStream = context.Request.Body;
-        _logger.LogInformation($"Query Keys:{context.Request.QueryString}");
-        //MemoryStream requestBody = new MemoryStream();
-        //await context.Request.Body.CopyToAsync(requestBody);
-        //requestBody.Seek(0, SeekOrigin.Begin);
-        //String requestText = await new StreamReader(requestBody).ReadToEndAsync();
-        //requestBody.Seek(0, SeekOrigin.Begin);
-        string requestBody = "";
-        using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8))
+        var requestBodyCopy = string.Empty;
+        if (request.ContentLength != null && request.ContentLength > 0)
         {
-            requestBody = await reader.ReadToEndAsync();
+           
+            using (var reader = new StreamReader(request.Body))
+            {
+                requestBodyCopy = await reader.ReadToEndAsync();
+               // _logger.LogInformation($"Request Body:{requestBodyCopy}");                
+            }
+            var requestBodyStream = new MemoryStream(Encoding.UTF8.GetBytes(requestBodyCopy));
+            context.Request.Body = requestBodyStream;
+
+            // Reset the position of the request body stream
+            context.Request.Body.Position = 0; // Reset the request body position for further processing
+
+            // Process the request body copy or use requestBodyCopy as needed
         }
 
-      // 
-        string responseBody = "";
-        //using (StreamReader reader = new StreamReader(context.Response.Body, Encoding.UTF8))
-        //{
-        //    responseBody = await reader.ReadToEndAsync();
-        //}
+        _logger.LogInformation($"{requestDetails} | Request Body:{requestBodyCopy}");
 
-        //await context.Response.Body.CopyToAsync(orignalBodyStream);
-        //  await responseBody.CopyToAsync(orignalBodyStream);
+        //MemoryStream requestBody = new MemoryStream();
+        //await request.Body.CopyToAsync(requestBody);
 
-        _logger.LogInformation($"Request:{requestBody}");
-        //_logger.LogInformation($"Response:{responseBody}");
 
-        await _next.Invoke(context);
+
+        //_logger.LogInformation(requestText);
+
+        // Capture the response
+        var originalBodyStream = context.Response.Body;
+        using (var responseBody = new MemoryStream())
+        {
+            context.Response.Body = responseBody;
+
+            await _next.Invoke(context);
+
+            // Log the response details
+            var response = context.Response;
+            //var responseDetails = ;
+            //_logger.LogInformation(responseDetails);
+
+            // Log the response body
+            responseBody.Seek(0, SeekOrigin.Begin);
+            var responseBodyText = await new StreamReader(responseBody).ReadToEndAsync();
+            _logger.LogInformation($"Response Status: {response.StatusCode} | Response: {responseBodyText}");
+
+            // Copy the response body to the original stream
+            responseBody.Seek(0, SeekOrigin.Begin);
+            await responseBody.CopyToAsync(originalBodyStream);
+        }
+
     }
-
     private async Task<string> GetRequestAsTextAsync(HttpRequest request)
     {
         var body = request.Body;
