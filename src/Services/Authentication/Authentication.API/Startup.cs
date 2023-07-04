@@ -78,9 +78,9 @@ namespace Authentication.API
             }
             //  app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-
-            app.AddGlobalExceptionHandler();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.AddGlobalExceptionHandler();
+            
 
             app.UseHttpsRedirection();
 
