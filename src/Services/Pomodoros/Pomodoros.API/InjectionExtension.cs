@@ -28,8 +28,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using Localization.Grpc.Protos;
-
-
+using SharedKernal.CacheService;
 
 namespace Pomodoros.API
 {
@@ -81,6 +80,7 @@ namespace Pomodoros.API
             services.AddScoped<IQueryPomodorosRepository, QueryPomodorosRepository>();
             services.AddScoped<IPomodoroContext, PomodoroContext>();
             services.AddSingleton<IAppSettingsQueryRepository, AppSettingsQueryRepository>();
+            services.AddSingleton<ICachedAppSettingServices, CachedAppSettingsService>();
             return services;
         }
 

@@ -28,6 +28,17 @@ namespace Authentication.API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
+            });
 
             services.AddCustomAuth(Configuration);
             services.AddCustomFluentValidation(Configuration);
@@ -57,7 +68,7 @@ namespace Authentication.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            
+            app.UseCors("AllowOrigin");
 
             if (env.IsDevelopment())
             {
@@ -65,13 +76,16 @@ namespace Authentication.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication.API v1"));
             }
+            //  app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
 
             app.AddGlobalExceptionHandler();
            
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            // Add Middleware
+           
+
             app.UseSerilogRequestLogging(
                 options=>
                 {
@@ -80,7 +94,7 @@ namespace Authentication.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-        //    app.UseMiddleware<RequestResponseLoggingMiddleware>();
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

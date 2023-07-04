@@ -15,18 +15,20 @@ namespace Pomodoros.Application.Features.Pomodoros.Commad.Insert
     public class InsertPomodoroHandler : IRequestHandler<InsertPomodoroRequest, InsertPomodoroResponse>
     {
         private readonly ICommandPomodorosRepository _commandPomodorosRepository;
-        private readonly IAppSettingsQueryRepository _appSettingsQueryRepository;
+        private readonly ICachedAppSettingServices _iCachedappSettings;
 
-        public InsertPomodoroHandler(ICommandPomodorosRepository commandPomodorosRepository, IAppSettingsQueryRepository appSettingsQueryRepository)
+        public InsertPomodoroHandler(ICommandPomodorosRepository commandPomodorosRepository,
+            ICachedAppSettingServices iCachedappSettings)
         {
             _commandPomodorosRepository = commandPomodorosRepository;
-            _appSettingsQueryRepository = appSettingsQueryRepository;
+            _iCachedappSettings = iCachedappSettings;
         }
 
-        public async Task<InsertPomodoroResponse> Handle(InsertPomodoroRequest request, CancellationToken cancellationToken)
+        public async Task<InsertPomodoroResponse> Handle(InsertPomodoroRequest request,
+            CancellationToken cancellationToken)
         {
-            var getPomodoroDuration = await _appSettingsQueryRepository
-                .GetAppSettingAsync((int)AppSettingEnums.PomodoroTimeLimit);
+            var getPomodoroDuration = _iCachedappSettings
+                .appSettingValue((int)AppSettingEnums.PomodoroTimeLimit);
 
             return new InsertPomodoroResponse
             {

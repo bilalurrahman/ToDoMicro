@@ -14,16 +14,18 @@ namespace Pomodoros.Application.Features.Pomodoros.Commad.Update
     public class UpdatePomodoroHandler : IRequestHandler<UpdatePomodoroRequest, UpdatePomodoroResponse>
     {
         private readonly ICommandPomodorosRepository _commandPomodorosRepository;
-        private readonly IAppSettingsQueryRepository _appSettingsQueryRepository;
-        public UpdatePomodoroHandler(ICommandPomodorosRepository commandPomodorosRepository, IAppSettingsQueryRepository appSettingsQueryRepository)
+        private readonly ICachedAppSettingServices _iCachedappSettings;
+        public UpdatePomodoroHandler(ICommandPomodorosRepository commandPomodorosRepository,
+            ICachedAppSettingServices iCachedappSettings)
         {
             _commandPomodorosRepository = commandPomodorosRepository;
-            _appSettingsQueryRepository = appSettingsQueryRepository;
+            _iCachedappSettings = iCachedappSettings;
         }
         public async Task<UpdatePomodoroResponse> Handle(UpdatePomodoroRequest request, CancellationToken cancellationToken)
         {
-            var getPomodoroDuration = await _appSettingsQueryRepository
-                .GetAppSettingAsync((int)AppSettingEnums.PomodoroTimeLimit);
+            var getPomodoroDuration = _iCachedappSettings
+                .appSettingValue((int)AppSettingEnums.PomodoroTimeLimit);
+
             var response = await _commandPomodorosRepository
                  .Update(new Domain.Entities.PomodorosEntity
                  {

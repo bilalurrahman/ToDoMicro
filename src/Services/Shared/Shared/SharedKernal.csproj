@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SharedKernal.Core\SharedKernal.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="..\..\Localization\Localization.Grpc\Protos\localization.proto" GrpcServices="Client">
       <Link>Protos\localization.proto</Link>
     </Protobuf>
