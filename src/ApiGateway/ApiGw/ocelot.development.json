@@ -27,9 +27,21 @@
       "UpstreamPathTemplate": "/Register",
       "UpstreamHttpMethod": [ "POST" ],
       "FileCacheOptions": { "TtlSeconds": 30 }
-    }
+    },
 
-    //Implementation of Tasks 
+    //Implementation of Tasks
+    {
+      "DownstreamPathTemplate": "/Tasks",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "tasks.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Tasks/GetAll",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
     //Implementation of Pomodoros
 
 
