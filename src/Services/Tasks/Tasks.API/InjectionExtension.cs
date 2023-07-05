@@ -169,6 +169,7 @@ namespace Tasks.API
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<UpdateDueDateEventConsumer>();
+                config.AddConsumer<UpdateReminderDateEventConsumer>();
 
                 config.UsingRabbitMq((ctx, cfg) =>
                 {

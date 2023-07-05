@@ -42,6 +42,10 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
                 throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Id, LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Name);
 
 
+            //get the older values 
+            //match the due date and reminder date and set the values of isnotified due to false and isnotified reminder to false.
+
+
             var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             updateTaskRepoRequest.userId = Convert.ToInt64(userId);
             var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);

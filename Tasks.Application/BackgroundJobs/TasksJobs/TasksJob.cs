@@ -51,5 +51,30 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
 
             return response;
         }
+
+        public async Task<List<TasksEntity>> ReminderCheck()
+        {
+            var response = await _tasksQueryRepository.GetAllForReminderJob();
+        
+            foreach (var resp in response)
+            {
+                var publishUpdateDueRequest = _imapper.Map<UpdateTasksReminderDateEvent>(resp);
+                publishUpdateDueRequest.isNotifiedForReminder = true;
+                await _ibus.Publish(publishUpdateDueRequest);
+
+                var taskReminderNotificationEvent = new TaskReminderNotificationEvent
+                {
+                    userDetails = new userDetails
+                    {
+                        userId = Convert.ToInt32(resp.userId),
+                    },
+                    dueDate = resp.DueDate,
+                    title = resp.Title
+                };
+                await _ibus.Publish(taskReminderNotificationEvent);
+            }
+           
+            return response;
+        }
     }
 }
