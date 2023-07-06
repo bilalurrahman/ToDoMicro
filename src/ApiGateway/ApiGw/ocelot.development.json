@@ -29,7 +29,8 @@
       "FileCacheOptions": { "TtlSeconds": 30 }
     },
 
-    //Implementation of Tasks
+
+
     {
       "DownstreamPathTemplate": "/Tasks",
       "DownstreamScheme": "http",
@@ -41,8 +42,72 @@
       ],
       "UpstreamPathTemplate": "/Tasks/GetAll",
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Tasks/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "tasks.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Tasks/{id}",
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Tasks",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "tasks.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Tasks/",
+      "UpstreamHttpMethod": [ "POST", "PUT" ]
+    },
+
+
+
+    {
+      "DownstreamPathTemplate": "/Pomodoro/GetAll/{TaskId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "pomodoros.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Pomodoro/GetAll/{TaskId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/Pomodoro/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "pomodoros.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Pomodoro/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/Pomodoro",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "pomodoros.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Pomodoro",
+      "UpstreamHttpMethod": [ "POST","PUT" ]
     }
-    //Implementation of Pomodoros
 
 
 

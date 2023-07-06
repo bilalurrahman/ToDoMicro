@@ -36,32 +36,13 @@ namespace Tasks.Job
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddHttpContextAccessor();
-            var domain = Assembly.Load(new AssemblyName("Tasks.Application"));
-            services.AddAutoMapper(typeof(Startup).Assembly, domain);
-            services.AddMediatR(typeof(Startup).Assembly, domain);
+            services.AddCustomMediatr();
+            services.AddCustomMapper();
+            services.AddDependencies();
+            services.AddCustomCache(Configuration);
+            services.AddCustomConfiguration(Configuration);
+            services.AddCustomMessagingQueue(Configuration);
 
-            services.AddMassTransit(config =>
-            {
-                config.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
-                });
-            });
-
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = Configuration.GetValue<string>("CacheDbSettings:ConnectionString");
-            });
-
-
-            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
-            services.AddScoped<ITaskJob, TasksJob>();
-            services.AddScoped<ITasksContext, TasksContext>();
-            services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
-            services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
-            services.Configure<NoSqlDataBaseSettings>(Configuration.GetSection("NoSqlDatabaseSettings"));
-            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
             services.AddHangfireServer();
         }
 
@@ -73,13 +54,9 @@ namespace Tasks.Job
             {
                 app.UseDeveloperExceptionPage();
             }
-            var options = new DashboardOptions()
-            {
-                Authorization = new[] { new MyAuthorizationFilter() }
-            };
-            app.UseHangfireDashboard("/hangfire", options);
+            
             app.UseRouting();
-
+            app.HangfireConfigure();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
@@ -88,12 +65,8 @@ namespace Tasks.Job
                 });
             });
 
-            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck",x => x.DueDateCheck(),Cron.MinuteInterval(15));//call from the appsettings.
-            RecurringJob.AddOrUpdate<ITaskJob>("ReminderDateCheck",x => x.ReminderCheck(),Cron.MinuteInterval(15));
+            
         }
-        public class MyAuthorizationFilter : IDashboardAuthorizationFilter
-        {
-            public bool Authorize(DashboardContext context) => true;
-        }
+        
     }
 }
