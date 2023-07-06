@@ -1,19 +1,17 @@
-using Authentication.Common.Helpers.JWTHelper;
-using MediatR;
+
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+using SharedKernal;
+using SharedKernal.GrpcServices;
+using SharedKernal.Middlewares.ExceptionHandlers;
+using Serilog;
+using SharedKernal.Middlewares.Logging;
 
 namespace Authentication.API
 {
@@ -30,41 +28,74 @@ namespace Authentication.API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
+            });
 
             services.AddCustomAuth(Configuration);
+            services.AddCustomFluentValidation(Configuration);
+            services.AddCustomMediatr(Configuration);
+            services.AddCustomConfiguration(Configuration);
+            services.AddDependencyInjection(Configuration);
+            services.AddSharedKernalDependencies();
+            services.AddLocalizationGrpcDependencies(Configuration);
+            services.AddCustomMapper();
+            services.AddSupportedCultureServices();
 
-            var domain = Assembly.Load(new AssemblyName("Authentication.Application"));
-            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly, domain);
-            services.Configure<JWTTokenSettings>(Configuration.GetSection("JWTTokenSettings"));
-            services.AddScoped<IJWTCreateToken, JWTCreateToken>();
+
+
+
 
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
-            });
 
+            });
+            ContainerManager.Container = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
+
+            app.UseCors("AllowOrigin");
+
             if (env.IsDevelopment())
             {
-               
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication.API v1"));
             }
+            //  app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.AddGlobalExceptionHandler();
+            
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+           
+
+            app.UseSerilogRequestLogging(
+                options=>
+                {
+                    options.EnrichDiagnosticContext = Enricher.HttpRequestEnricher;
+                });
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

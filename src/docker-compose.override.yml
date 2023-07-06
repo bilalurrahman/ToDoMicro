@@ -3,6 +3,15 @@ version: '3.4'
 services:
 
 
+  tasksdb:
+    container_name: tasksdb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+
   portainer:
     container_name: portainer
     restart: always
@@ -13,11 +22,120 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
 
+  seq:
+    container_name: seq
+    restart: unless-stopped
+    ports:
+       - "5341:80"
+    environment:
+        ACCEPT_EULA: "Y"  
+    volumes:
+        - ./seq-data:/data 
+
+  userdb:
+    container_name: user
+    environment:
+        SA_PASSWORD: "SwN12345678"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
+    volumes:
+      - ./data:/var/opt/mssql/data
+      - ./log:/var/opt/mssql/log
+      - ./secrets:/var/opt/mssql/secrets
+
+  distcachedb:
+    container_name: distcachedb
+    restart: always
+    ports:
+      - "6379:6379"
 
 
   authentication.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:UserDBQueryConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;ApplicationIntent=ReadOnly;"
+      - "DatabaseSettings:UserDBConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;"
+      - "GrpcSettings:LocalizationUrl=localization.grpc"
+    depends_on:
+      - userdb
     ports:
-      - "9500:80"
+      - "5800:80"
+
+
+
+  localization.grpc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:LocalizationRecordsDBQueryConnection=Server=userdb;Database=Localization;User Id=sa;Password=SwN12345678;ApplicationIntent=ReadOnly;"
+    depends_on:
+      - userdb
+    ports:
+      - "5701:80"
+
+
+
+  tasks.api:
+    container_name: tasks.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "CacheSettings:ConnectionString=distcachedb:6379"
+      - "GrpcSettings:LocalizationUrl=localization.grpc"
+    depends_on:
+      - tasksdb
+      - rabbitmq
+      - distcachedb
+    ports:
+      - "5702:80"
+
+
+  announcement.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:      
+      - rabbitmq
+    ports:
+      - "5703:80"
+
+
+  tasks.job:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:TasksJobConnection=Server=userdb;Database=UsersDb;User Id=sa;Password=SwN12345678;TrustServerCertificate=True"
+    depends_on:
+      - userdb
+    ports:
+      - "5704:80"
+
+
+  pomodoros.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "NoSqlDatabaseSettings:ConnectionString=mongodb://tasksdb:27017"
+      - "DatabaseSettings:AppSettingsDBConnection=Server=userdb;Database=AppSettingsDb;User Id=sa;Password=SwN12345678;TrustServerCertificate=True"
+    depends_on:
+      - tasksdb
+      - userdb
+    ports:
+      - "5705:80"
+
+
+  apigw:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+       - authentication.api    
+    ports:
+      - "5710:80"
+

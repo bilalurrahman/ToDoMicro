@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Localization.Grpc.Protos";
+
+
+service LocalizationProtoService{
+	rpc GetLocalization (GetLocalizationRequest) returns (GetLocalizationResponse);
+}
+
+message GetLocalizationRequest{
+	string LocalizationKey = 1;
+	int32 languageId = 2; 
+}
+
+message GetLocalizationResponse  {
+	string Text = 1;
+}

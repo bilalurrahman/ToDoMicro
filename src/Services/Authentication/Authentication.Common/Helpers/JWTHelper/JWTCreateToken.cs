@@ -19,35 +19,63 @@ namespace Authentication.Common.Helpers.JWTHelper
             //this.configuration = configuration;
             _iOptions = iOptions;
         }
-        public async Task<JWTModel> Generate(string username)
+
+        public async Task<string> GenerateRefreshToken()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
+        public async Task<JWTModel> GenerateToken(string username, int id)
         {
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,username),
-                    new Claim(ClaimTypes.Role,"User")
+                    new Claim(ClaimTypes.Role,"User"),
+                    new Claim("UserId",id.ToString())
                 };
            
-            return CreateToken(claims);
+            return await CreateToken(claims);
                
         }
 
-        private JWTModel CreateToken(IEnumerable<Claim> claims)
+        private async Task<JWTModel> CreateToken(IEnumerable<Claim> claims)
         {  
             var secretKey = Encoding.ASCII.GetBytes(_iOptions.Value.SecretKey);
-            var expiresAt = DateTime.UtcNow.AddMinutes(20);
+            var refreshExpiresAt = DateTime.UtcNow.AddMinutes(30);
 
             var jwt = new JwtSecurityToken(
                 claims: claims,
                 notBefore: DateTime.UtcNow,
-                expires: expiresAt,
+                expires: DateTime.UtcNow.AddMinutes(120),
                 signingCredentials: new SigningCredentials(
                         new SymmetricSecurityKey(secretKey),
                         SecurityAlgorithms.HmacSha256Signature
                     )
                 );
 
-            return new JWTModel { Expiry = expiresAt, Token = new JwtSecurityTokenHandler().WriteToken(jwt) };
+            return new JWTModel { RefreshTokenExpiry = refreshExpiresAt, Token = new JwtSecurityTokenHandler().WriteToken(jwt),RefreshToken= await GenerateRefreshToken() };
            
         }
+
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_iOptions.Value.SecretKey)),
+                ValidateLifetime = false 
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            return principal;
+        }
+
+
     }
 }
