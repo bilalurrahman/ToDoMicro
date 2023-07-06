@@ -48,6 +48,7 @@ namespace Tasks.API
                 app.UseDeveloperExceptionPage();
                 
             }
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.AddGlobalExceptionHandler();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasks.API v1"));

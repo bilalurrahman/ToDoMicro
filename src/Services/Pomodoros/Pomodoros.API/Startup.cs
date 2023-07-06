@@ -23,6 +23,7 @@ using Pomodoros.Infrastructure.Context;
 using SharedKernal.Core.Interfaces.AppSettings;
 using SharedKernal.Infrastructure.Persistance.AppSettings;
 using SharedKernal;
+using SharedKernal.Middlewares.ExceptionHandlers;
 
 namespace Pomodoros.API
 {
@@ -76,6 +77,9 @@ namespace Pomodoros.API
             }
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pomodoros.API v1"));
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.AddGlobalExceptionHandler();
 
             app.UseRouting();
 
