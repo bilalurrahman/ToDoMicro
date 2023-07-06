@@ -13,24 +13,29 @@ using Newtonsoft.Json;
 using AutoMapper;
 using SharedKernal.Common.HttpContextHelper;
 using SharedKernal.Common.Exceptions;
+using Tasks.Application.Features.Tasks.Queries.GetTask;
 
 namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 {
     public class UpdateTaskHandler : IRequestHandler<UpdateTaskRequest, UpdateTaskResponse>
     {
         private readonly ITasksCommandsRepository _tasksCommandsRepository;
+        private readonly ITasksQueryRepository _taskQueryRepository;
         private readonly IHttpContextHelper _httpContextHelper;
         private readonly IDistributedCache _distributedCache;
         private readonly IMapper _mapper;
+
         public UpdateTaskHandler(ITasksCommandsRepository tasksCommandsRepository,
-             IDistributedCache distributedCache, IMapper mapper, 
-             IHttpContextHelper httpContextHelper)
+             IDistributedCache distributedCache, IMapper mapper,
+             IHttpContextHelper httpContextHelper
+, ITasksQueryRepository taskQueryRepository)
         {
             _tasksCommandsRepository = tasksCommandsRepository;
-            
+
             _distributedCache = distributedCache;
             _mapper = mapper;
             _httpContextHelper = httpContextHelper;
+            _taskQueryRepository = taskQueryRepository;
         }
         public async Task<UpdateTaskResponse> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
@@ -41,6 +46,16 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
             if (string.IsNullOrEmpty(request?.Title))
                 throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Id, LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Name);
 
+
+            //get the older values
+            var getOlderVals = await _taskQueryRepository.Get(request.Id); //get the value from cache?
+
+            ////match the due date and reminder date and set the values of isnotified due to false and isnotified reminder to false.
+            if (getOlderVals.DueDate != request.DueDate)
+                request.isNotifiedForDue = false;
+            if (request.HaveReminder
+                && getOlderVals.ReminderDateTime != request.ReminderDateTime)
+                request.isNotifiedForReminder = false;
 
             var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             updateTaskRepoRequest.userId = Convert.ToInt64(userId);

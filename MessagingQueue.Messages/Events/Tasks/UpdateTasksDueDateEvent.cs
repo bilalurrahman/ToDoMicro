@@ -14,7 +14,8 @@ namespace EventsBus.Messages.Events.Tasks
         public DateTime DueDate { get; set; }
 
         public bool HaveReminder { get; set; }
-
+        public DateTime ReminderDateTime { get; set; }
+        public bool isNotifiedForReminder { get; set; }
         public bool isPinned { get; set; }
         public bool isNotifiedForDue { get; set; }
         public List<SubTasks> SubTasks { get; set; }

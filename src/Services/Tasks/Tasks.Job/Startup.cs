@@ -88,7 +88,8 @@ namespace Tasks.Job
                 });
             });
 
-            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck",x => x.DueDateCheck(),Cron.MinuteInterval(3));
+            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck",x => x.DueDateCheck(),Cron.MinuteInterval(15));//call from the appsettings.
+            RecurringJob.AddOrUpdate<ITaskJob>("ReminderDateCheck",x => x.ReminderCheck(),Cron.MinuteInterval(15));
         }
         public class MyAuthorizationFilter : IDashboardAuthorizationFilter
         {

@@ -9,10 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using MassTransit;
 using Announcement.Application.Features.MessageConsumer;
 using EventsBus.Messages.Common;
@@ -47,6 +44,7 @@ namespace Announcement.API
             {
                 config.AddConsumer<NewTaskEmailCreationEventConsumer>();
                 config.AddConsumer<DueDateNotificationEventConsumer>();
+                config.AddConsumer<ReminderDateNotificationEventConsumer>();
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(Configuration["EventBusSettings:HostAddress"]);
 
@@ -58,6 +56,11 @@ namespace Announcement.API
                     cfg.ReceiveEndpoint(EventBusConstants.DueDateNotificationQueue, c =>
                     {
                         c.ConfigureConsumer<DueDateNotificationEventConsumer>(ctx);
+                    }); 
+                    
+                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateNotificationQueue, c =>
+                    {
+                        c.ConfigureConsumer<ReminderDateNotificationEventConsumer>(ctx);
                     });
                 });
 

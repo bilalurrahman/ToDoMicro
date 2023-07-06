@@ -169,6 +169,7 @@ namespace Tasks.API
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<UpdateDueDateEventConsumer>();
+                config.AddConsumer<UpdateReminderDateEventConsumer>();
 
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
@@ -177,6 +178,10 @@ namespace Tasks.API
                     cfg.ReceiveEndpoint(EventBusConstants.DueDateUpdateQueue, c =>
                     {
                         c.ConfigureConsumer<UpdateDueDateEventConsumer>(ctx);
+                    });
+                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateReminderDateEventConsumer>(ctx);
                     });
 
                 });
