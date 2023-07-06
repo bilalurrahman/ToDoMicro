@@ -11,6 +11,6 @@ namespace EventsBus.Messages.Events.Tasks
         public userDetails userDetails { get; set; }
         public string title { get; set; }
 
-        public DateTime dueDate { get; set; }
+        public DateTime ReminderdDate { get; set; }
     }
 }

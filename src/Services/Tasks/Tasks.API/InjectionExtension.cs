@@ -179,6 +179,10 @@ namespace Tasks.API
                     {
                         c.ConfigureConsumer<UpdateDueDateEventConsumer>(ctx);
                     });
+                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateReminderDateEventConsumer>(ctx);
+                    });
 
                 });
                 

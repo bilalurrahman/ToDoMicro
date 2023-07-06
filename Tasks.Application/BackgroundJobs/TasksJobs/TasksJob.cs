@@ -60,6 +60,7 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
             {
                 var publishUpdateDueRequest = _imapper.Map<UpdateTasksReminderDateEvent>(resp);
                 publishUpdateDueRequest.isNotifiedForReminder = true;
+                publishUpdateDueRequest.HaveReminder = false;
                 await _ibus.Publish(publishUpdateDueRequest);
 
                 var taskReminderNotificationEvent = new TaskReminderNotificationEvent
@@ -68,7 +69,7 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
                     {
                         userId = Convert.ToInt32(resp.userId),
                     },
-                    dueDate = resp.DueDate,
+                    ReminderdDate = resp.ReminderDateTime,
                     title = resp.Title
                 };
                 await _ibus.Publish(taskReminderNotificationEvent);
