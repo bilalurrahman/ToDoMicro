@@ -41,12 +41,12 @@ namespace Authentication.Common.Helpers.JWTHelper
         private async Task<JWTModel> CreateToken(IEnumerable<Claim> claims)
         {  
             var secretKey = Encoding.ASCII.GetBytes(_iOptions.Value.SecretKey);
-            var refreshExpiresAt = DateTime.UtcNow.AddMinutes(30);
+            var refreshExpiresAt = DateTime.UtcNow.AddMinutes(20);
 
             var jwt = new JwtSecurityToken(
                 claims: claims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(120),
+                expires: DateTime.UtcNow.AddMinutes(20),
                 signingCredentials: new SigningCredentials(
                         new SymmetricSecurityKey(secretKey),
                         SecurityAlgorithms.HmacSha256Signature
