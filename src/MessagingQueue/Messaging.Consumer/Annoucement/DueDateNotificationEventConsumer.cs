@@ -14,7 +14,7 @@ namespace EventBus.Consumer.Annoucement
     public class DueDateNotificationEventConsumer : IConsumer<DueDateNotificationEvent>
     {
         private readonly IRestClient _restClient;
-        protected string _sendMail => "http://localhost:5703/SendEmail";
+        protected string _sendMail => "http://announcement.api/Email/SendEmail";
         private readonly ILogger<DueDateNotificationEventConsumer> _logger;
         public DueDateNotificationEventConsumer(ILogger<DueDateNotificationEventConsumer> logger, IRestClient restClient)
         {

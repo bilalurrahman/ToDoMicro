@@ -4,10 +4,6 @@ using EventsBus.Messages.Events.Tasks;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using SharedKernal.Core.Interfaces.RestClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EventBus.Consumer.Annoucement
@@ -17,7 +13,7 @@ namespace EventBus.Consumer.Annoucement
         
         private readonly ILogger<NewTaskEmailCreationEventConsumer> _logger;
         private readonly IRestClient _restClient;
-        protected string _sendMail => "http://localhost:5703/SendEmail";
+        protected string _sendMail => "http://announcement.api/Email/SendEmail";
         public NewTaskEmailCreationEventConsumer(ILogger<NewTaskEmailCreationEventConsumer> logger, IRestClient restClient)
         {
             _logger = logger;

@@ -62,10 +62,17 @@ services:
       context: .
       dockerfile: ApiGateway/ApiGw/Dockerfile
 
+  eventbus.job:
+    image: ${DOCKER_REGISTRY-}eventbusjob
+    build:
+      context: .
+      dockerfile: MessagingQueue/MessagingQueue.Job/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
   mongo_data:
+
 
 
 

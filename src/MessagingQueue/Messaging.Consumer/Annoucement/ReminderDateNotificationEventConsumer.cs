@@ -15,7 +15,7 @@ namespace EventBus.Consumer.Annoucement
     public class ReminderDateNotificationEventConsumer : IConsumer<TaskReminderNotificationEvent>
     {
         private readonly IRestClient _restClient;
-        protected string _sendMail => "http://localhost:5703/SendEmail";
+        protected string _sendMail => "http://announcement.api/Email/SendEmail";
 
         private readonly ILogger<ReminderDateNotificationEventConsumer> _logger;
         public ReminderDateNotificationEventConsumer(ILogger<ReminderDateNotificationEventConsumer> logger, IRestClient restClient)

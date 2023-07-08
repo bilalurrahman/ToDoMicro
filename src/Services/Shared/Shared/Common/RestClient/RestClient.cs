@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Serilog;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using SharedKernal.Core.Interfaces.RestClient;
 using SharedKernal.Common.Exceptions;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace Tawakkalna.Integration.RestClient
 {
@@ -25,14 +26,14 @@ namespace Tawakkalna.Integration.RestClient
 
     public class RestClient : IRestClient
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<RestClient> _logger;
         private readonly IHttpClientFactory _httpClientFactory;     
         // private readonly AppConfig _appConfig;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
 
-        public RestClient(ILogger logger,
+        public RestClient(ILogger<RestClient> logger,
             IHttpClientFactory httpClientFactory,
            
             IHttpContextAccessor httpContextAccessor,
@@ -572,7 +573,7 @@ namespace Tawakkalna.Integration.RestClient
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, contentAsString);
+                _logger.LogError(ex, contentAsString);
                 throw new CommonException("Sorry.....Please try again later.");
             }
         }
@@ -592,7 +593,7 @@ namespace Tawakkalna.Integration.RestClient
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "file Contnet desrialization Error");
+                _logger.LogError(ex, "file Contnet desrialization Error");
                 throw new CommonException("Sorry.....Please try again later.");
             }
         }
@@ -642,48 +643,10 @@ namespace Tawakkalna.Integration.RestClient
             string proxyUrl,
             TimeSpan proxyCallDuration)
         {
-            if (!proxyUrl.ToLower().EndsWith("/api/core/user/public/login") && !proxyUrl.ToLower().EndsWith("/api/core/user/public")) //change the url
-            {
-                var logger = _logger
-                    .ForContext("ProxyAction", proxyAction)
-                    .ForContext("ProxyUrl", proxyUrl)
-                    .ForContext("ProxyCode", 200)
-                    .ForContext("ProxyCodeName", "Ok")
-                    .ForContext("ProxyCallDuration", proxyCallDuration.TotalMilliseconds)
-                    .ForContext("ProxyRequest", proxyRequest, true)
-                    .ForContext("ProxyResponse", proxyResponse, true)
-                    .ForContext("ServerName", Environment.MachineName)
-                    .ForContext("TraceIdentifier", Activity.Current?.Id ?? _httpContextAccessor.HttpContext.TraceIdentifier)
-                .ForContext("IsAuthenticated", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated)
-                .ForContext("Username", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true ? _httpContextAccessor.HttpContext.User?.Identity?.Name : "Not Authenticated");
-
-                logger.Information("PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-                    proxyAction,
-                    proxyUrl,
-                    200,
-                    proxyCallDuration.TotalMilliseconds);
-            }
-            else
-            {
-                var logger = _logger
-                    .ForContext("ProxyAction", proxyAction)
-                    .ForContext("ProxyUrl", proxyUrl)
-                    .ForContext("ProxyCode", 200)
-                    .ForContext("ProxyCodeName", "Ok")
-                    .ForContext("ProxyCallDuration", proxyCallDuration.TotalMilliseconds)
-                    .ForContext("ProxyRequest", "*******")
-                    .ForContext("ProxyResponse", proxyResponse, true)
-                    .ForContext("ServerName", Environment.MachineName)
-                    .ForContext("TraceIdentifier", Activity.Current?.Id ?? _httpContextAccessor.HttpContext.TraceIdentifier)
-                .ForContext("IsAuthenticated", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated)
-                .ForContext("Username", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true ? _httpContextAccessor.HttpContext.User?.Identity?.Name : "Not Authenticated");
-
-                logger.Information("PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-                    proxyAction,
-                    proxyUrl,
-                    200,
-                    proxyCallDuration.TotalMilliseconds);
-            }
+           
+                
+                _logger.LogInformation("Successfully called the api");
+              
         }
 
         //private void LogFailed(object proxyRequest,
