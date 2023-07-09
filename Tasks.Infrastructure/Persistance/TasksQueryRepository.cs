@@ -35,7 +35,7 @@ namespace Tasks.Infrastructure.Persistance
 
         public async Task<List<TasksEntity>> GetAllForReminderJob()
         {
-            return await _context.TasksCollection.Find(p => p.isCompleted == false && p.isActive && p.DueDate < DateTime.Now && !p.isNotifiedForReminder).ToListAsync();
+            return await _context.TasksCollection.Find(p => p.isCompleted == false && p.isActive && p.ReminderDateTime < DateTime.Now && !p.isNotifiedForReminder).ToListAsync();
         }
     }
 }

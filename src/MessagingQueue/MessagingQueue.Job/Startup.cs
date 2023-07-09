@@ -25,6 +25,7 @@ namespace EventBus.Job
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDependencyInjection();
+            services.AddCustomMapper(Configuration);
             services.AddMessageQueues(Configuration);
         }
 

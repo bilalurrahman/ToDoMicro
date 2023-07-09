@@ -1,14 +1,14 @@
 ﻿using EventBus.Consumer.Annoucement;
+using EventBus.Consumer.Tasks;
 using EventsBus.Messages.Common;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernal.Common.HttpContextHelper;
 using SharedKernal.Core.Interfaces.RestClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+
+using AutoMapper;
 using Tawakkalna.Integration.RestClient;
 
 namespace EventBus.Job
@@ -23,6 +23,12 @@ namespace EventBus.Job
             services.AddScoped<IRestClient, RestClient>();            
           return services;
         }
+        public static IServiceCollection AddCustomMapper(this IServiceCollection services, IConfiguration configuration)
+        {
+            var domain = Assembly.Load(new AssemblyName("EventBus.Core"));
+            services.AddAutoMapper(typeof(Startup).Assembly, domain);
+            return services;
+        }
         public static IServiceCollection AddMessageQueues(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMassTransit(config =>
@@ -30,6 +36,9 @@ namespace EventBus.Job
                 config.AddConsumer<NewTaskEmailCreationEventConsumer>();
                 config.AddConsumer<DueDateNotificationEventConsumer>();
                 config.AddConsumer<ReminderDateNotificationEventConsumer>();
+                config.AddConsumer<UpdateDueDateEventConsumer>();
+                config.AddConsumer<UpdateReminderDateEventConsumer>();
+
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(configuration["EventBusSettings:HostAddress"]);
 
@@ -46,6 +55,14 @@ namespace EventBus.Job
                     cfg.ReceiveEndpoint(EventBusConstants.ReminderDateNotificationQueue, c =>
                     {
                         c.ConfigureConsumer<ReminderDateNotificationEventConsumer>(ctx);
+                    });
+                    cfg.ReceiveEndpoint(EventBusConstants.DueDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateDueDateEventConsumer>(ctx);
+                    });
+                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateReminderDateEventConsumer>(ctx);
                     });
                 });
 
