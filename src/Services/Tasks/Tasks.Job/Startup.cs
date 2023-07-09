@@ -45,6 +45,7 @@ namespace Tasks.Job
             services.AddCustomConfiguration(Configuration);
             services.AddCustomMessagingQueue(Configuration);
 
+           // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
             services.AddHangfireServer();
         }
 
@@ -56,9 +57,9 @@ namespace Tasks.Job
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseRouting();
             app.HangfireConfigure();
+            app.UseRouting();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
