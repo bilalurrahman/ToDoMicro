@@ -155,6 +155,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - HealthChecksUI__HealthChecks__0__Name=Authentication Health Check
       - HealthChecksUI__HealthChecks__0__Uri=http://authentication.api/hc
+      - HealthChecksUI__HealthChecks__1__Name=Message Queue Health Check
+      - HealthChecksUI__HealthChecks__1__Uri=http://eventbus.job/hc
     ports:
       - "5707:80"
 

@@ -1,4 +1,6 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,9 @@ namespace EventBus.Job
             services.AddDependencyInjection();
             services.AddCustomMapper(Configuration);
             services.AddMessageQueues(Configuration);
+            services.AddHealthMonitoring(Configuration);
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +49,12 @@ namespace EventBus.Job
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("RabbitMQ Consumer");
+                });
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
         }
