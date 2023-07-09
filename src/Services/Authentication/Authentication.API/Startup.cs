@@ -12,6 +12,8 @@ using SharedKernal.GrpcServices;
 using SharedKernal.Middlewares.ExceptionHandlers;
 using Serilog;
 using SharedKernal.Middlewares.Logging;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Authentication.API
 {
@@ -50,7 +52,7 @@ namespace Authentication.API
             services.AddCustomMapper();
             services.AddSupportedCultureServices();
 
-
+            services.AddHealthMonitoring(Configuration);
 
 
 
@@ -99,6 +101,11 @@ namespace Authentication.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
         }
     }
