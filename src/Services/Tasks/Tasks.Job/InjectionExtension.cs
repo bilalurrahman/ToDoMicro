@@ -7,7 +7,6 @@ using System.Reflection;
 using Tasks.Application.BackgroundJobs.TasksJobs;
 using Tasks.Application.Contracts;
 using Tasks.Application.Contracts.Context;
-using Tasks.Application.MessageConsumer;
 using Tasks.Application.Models;
 using Tasks.Infrastructure.Context;
 using Tasks.Infrastructure.Persistance;

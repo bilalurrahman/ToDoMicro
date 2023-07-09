@@ -44,9 +44,8 @@ namespace Authentication.Application.Features.Login
                 }
             }
             else
-            {
                 throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.IncorrectUserName.Id, LogEventIds.EntityNotFoundEventIds.IncorrectUserName.Name);
-            }
+            
 
             return new LoginResponse();
         }

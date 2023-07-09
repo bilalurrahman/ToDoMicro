@@ -139,3 +139,13 @@ services:
     ports:
       - "5710:80"
 
+
+  eventbus.job:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:      
+      - rabbitmq
+    ports:
+      - "5706:80"
+

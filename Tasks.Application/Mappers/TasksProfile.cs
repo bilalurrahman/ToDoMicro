@@ -60,7 +60,8 @@ namespace Tasks.Application.Mappers
                 .ForMember(dest => dest.isDeleted, opt => opt.MapFrom(src => src.isDeleted))
                 .ForMember(dest => dest.SubTasks, opt => opt.MapFrom(src => MapFromSourceToDestinationOnPublish(src.SubTasks)))
                 .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue));
-
+            
+            
           
             CreateMap<UpdateTasksDueDateEvent, UpdateTaskRequest>()
                 .ForMember(dest => dest.isActive, opt => opt.MapFrom(src => src.isActive))

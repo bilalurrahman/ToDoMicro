@@ -2,7 +2,6 @@
 using EventsBus.Messages.Events.Tasks;
 using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using SharedKernal.Common.Exceptions;
 using SharedKernal.Common.HttpContextHelper;
 using System;

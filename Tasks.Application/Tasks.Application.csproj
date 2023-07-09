@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Tasks.Domain\Tasks.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MessageConsumer\" />
+  </ItemGroup>
+
 </Project>

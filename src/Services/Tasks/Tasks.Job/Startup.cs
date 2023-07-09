@@ -27,6 +27,8 @@ namespace Tasks.Job
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,6 +45,7 @@ namespace Tasks.Job
             services.AddCustomConfiguration(Configuration);
             services.AddCustomMessagingQueue(Configuration);
 
+           // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
             services.AddHangfireServer();
         }
 
@@ -54,9 +57,9 @@ namespace Tasks.Job
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseRouting();
             app.HangfireConfigure();
+            app.UseRouting();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
