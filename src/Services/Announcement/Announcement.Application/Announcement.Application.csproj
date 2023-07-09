@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\..\..\MessagingQueue.Messages\EventsBus.Messages.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+  </ItemGroup>
+
 </Project>

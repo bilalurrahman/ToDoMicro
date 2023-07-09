@@ -3,16 +3,11 @@ using Announcement.Application.Contracts.Integration;
 using Announcement.Application.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
-using MassTransit;
-using Announcement.Application.Features.MessageConsumer;
-using EventsBus.Messages.Common;
+using Microsoft.OpenApi.Models;
 
 namespace Announcement.API
 {
@@ -38,33 +33,7 @@ namespace Announcement.API
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailIntegration, EmailIntegration>();
 
-            //Add Queue Here for masstransit
-
-            services.AddMassTransit(config =>
-            {
-                config.AddConsumer<NewTaskEmailCreationEventConsumer>();
-                config.AddConsumer<DueDateNotificationEventConsumer>();
-                config.AddConsumer<ReminderDateNotificationEventConsumer>();
-                config.UsingRabbitMq((ctx, cfg) => {
-                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
-
-                    cfg.ReceiveEndpoint(EventBusConstants.NewTaskEmailCreationQueue, c =>
-                    {
-                        c.ConfigureConsumer<NewTaskEmailCreationEventConsumer>(ctx);
-                    });
-
-                    cfg.ReceiveEndpoint(EventBusConstants.DueDateNotificationQueue, c =>
-                    {
-                        c.ConfigureConsumer<DueDateNotificationEventConsumer>(ctx);
-                    }); 
-                    
-                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateNotificationQueue, c =>
-                    {
-                        c.ConfigureConsumer<ReminderDateNotificationEventConsumer>(ctx);
-                    });
-                });
-
-            });
+            
 
         }
 
