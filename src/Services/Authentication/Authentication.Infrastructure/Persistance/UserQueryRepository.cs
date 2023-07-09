@@ -62,5 +62,22 @@ namespace Authentication.Infrastructure.Persistance
             }
 
         }
+
+        public async Task<int> GetClientLogin(Client client)
+        {
+            using (IDbConnection _dbConnection = this.GetQueryConnection())
+            {
+                string query = @"SELECT [ID]                             
+                          FROM [dbo].[Clients] with (nolock)
+                          WHERE [client_id] = @Username
+                          AND  [client_password] = @Password
+                          AND [is_active] = 1";
+
+                var clientExists = await _dbConnection.QueryFirstOrDefaultAsync<int>(query, new { Username = client.Username, Password = client.Password });
+
+                return clientExists;
+
+            }
+        }
     }
 }

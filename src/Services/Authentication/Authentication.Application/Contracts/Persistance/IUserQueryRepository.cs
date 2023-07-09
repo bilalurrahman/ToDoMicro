@@ -8,5 +8,7 @@ namespace Authentication.Application.Contracts.Persistance
         Task<RegisterUser> GetUserInfo(string username);
 
         Task<UserToken> GetRefreshToken(string username);
+
+        Task<int> GetClientLogin(Client client);
     }
 }

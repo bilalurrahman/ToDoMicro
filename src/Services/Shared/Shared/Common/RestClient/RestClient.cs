@@ -438,21 +438,20 @@ namespace Tawakkalna.Integration.RestClient
             // //var cacheToken = TokenCacheObject.GetToken();
             ////
 
-            // var input = new AuthenticateRequest(_config["TWKConnectionCredential:client_id"], _config["TWKConnectionCredential:secret"]);
+            var input = new ClientAuth(_config["ClientAuth:clientId"], 
+                _config["ClientAuth:clientSecret"]);
 
-            // string json = JsonConvert.SerializeObject(input);
+             string json = JsonConvert.SerializeObject(input);
 
-            // var response = await _httpClient.PostAsync(_config["TWKConnectionUrl"] + _config["TWKService:PanelBaseUri:Login"] + "login-client"
-            //     , new StringContent(json, Encoding.UTF8, "application/json"));
+             var response = await _httpClient.PostAsync("http://authentication.api/Client/ClientLogin"
+                 , new StringContent(json, Encoding.UTF8, "application/json"));
 
-            // var token = response.Content.ReadAsStringAsync().Result;
-            // var tk = JsonConvert.DeserializeObject<string>(token);
+             var token = response.Content.ReadAsStringAsync().Result;
+            var tk = JsonConvert.DeserializeObject<TokenResponse>(token);
+            return tk.Token;
 
             //// TokenCacheObject.AddToken(tk, DateTime.Now.AddMinutes(90));
-
             // return tk;
-
-            return "";
 
         }
 
@@ -600,12 +599,30 @@ namespace Tawakkalna.Integration.RestClient
 
       
 
+
         private class RefreshTokenRequest
         {
             [JsonProperty("refreshToken")]
             public string RefreshToken { get; set; }
         }
-
+        private class ClientAuth
+        {
+            [JsonProperty("ClientUsername")]
+            public string clientID { get; set; }
+            [JsonProperty("ClientPassword")]
+            public string clientPassword{ get; set; }
+            public ClientAuth(string clientID, string clientPassword)
+            {
+                this.clientID = clientID;
+                this.clientPassword = clientPassword;
+            }
+        }
+        private class TokenResponse
+        {
+            public string Token { get; set; }
+            public string RefreshToken { get; set; }
+            public DateTime RefreshTokenExpiry { get; set; }
+        }
         private class RefreshTokenResponse
         {
             [JsonProperty("access_token")]

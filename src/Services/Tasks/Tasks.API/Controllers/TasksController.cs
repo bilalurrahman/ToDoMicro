@@ -14,7 +14,7 @@ namespace Tasks.API.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TasksController : ControllerBase
     {
         private readonly IMediator _mediator;
