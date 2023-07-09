@@ -7,9 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using SharedKernal.Common.HttpContextHelper;
 using SharedKernal.Core.Interfaces.RestClient;
 using System.Reflection;
-
+using HealthChecks.UI.Client;
 using AutoMapper;
 using Tawakkalna.Integration.RestClient;
+using RabbitMQ.Client;
+using System;
 
 namespace EventBus.Job
 {
@@ -41,7 +43,7 @@ namespace EventBus.Job
 
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(configuration["EventBusSettings:HostAddress"]);
-
+                    
                     cfg.ReceiveEndpoint(EventBusConstants.NewTaskEmailCreationQueue, c =>
                     {
                         c.ConfigureConsumer<NewTaskEmailCreationEventConsumer>(ctx);
@@ -67,6 +69,25 @@ namespace EventBus.Job
                 });
 
             });
+            //services.AddMassTransitHostedService();
+            return services;
+        }
+
+
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var connStr = configuration["EventBusSettings:HostAddress"].ToString();
+            var factory = new ConnectionFactory()
+            {
+                Uri = new Uri(connStr),
+                AutomaticRecoveryEnabled = true
+            };
+            var connection = factory.CreateConnection();
+            services.AddSingleton(connection)
+                .AddHealthChecks()
+               .AddRabbitMQ();
             return services;
         }
     }

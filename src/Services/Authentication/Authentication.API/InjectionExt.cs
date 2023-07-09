@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Authentication.API
 {
@@ -130,6 +131,24 @@ namespace Authentication.API
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;
                 });
+        }
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            string grpcServerUrl = "http://host.docker.internal:5701";
+                //(configuration["GrpcSettings:LocalizationUrl"]);
+
+            services.AddSingleton<GrpcHealthCheck>(new GrpcHealthCheck(grpcServerUrl));
+            services.AddHealthChecks()
+               .AddSqlServer(configuration["DatabaseSettings:UserDBQueryConnection"],
+                name: "SQL Server",
+                failureStatus: HealthStatus.Degraded,
+                tags: new[] { "db", "sql", "database" })
+             .AddCheck<SeqHealthCheck>("Seq")
+             .AddCheck<GrpcHealthCheck>("Grpc Localization");
+
+            return services;
         }
 
     }
