@@ -27,6 +27,8 @@ using Tasks.Application.Contracts.Context;
 using Tasks.Application.Models;
 using Tasks.Infrastructure.Context;
 using Tasks.Infrastructure.Persistance;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 
 namespace Tasks.API
 {
@@ -202,6 +204,19 @@ namespace Tasks.API
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;
                 });
+        }
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services,
+          IConfiguration configuration)
+        {
+
+            services.AddHealthChecks()
+                 .AddMongoDb(configuration["NoSqlDatabaseSettings:ConnectionString"]
+                 , "MongoDb Health", HealthStatus.Degraded)
+                 .AddRedis(configuration["CacheDbSettings:ConnectionString"], 
+                  "Redis Health", HealthStatus.Degraded);
+
+            return services;
         }
     }
 

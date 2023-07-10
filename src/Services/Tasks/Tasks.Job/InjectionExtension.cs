@@ -97,8 +97,18 @@ namespace Tasks.Job
         {
             public bool Authorize(DashboardContext context) => true;
         }
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services)
+        {
+            services.AddHealthChecks()
+            .AddHangfire(options =>
+            {
+                options.MinimumAvailableServers = 1; // Minimum number of available Hangfire servers
+                options.MaximumJobsFailed = 5; // Maximum number of failed jobs
+            });
 
-
+            return services;
+        }
+            
     }
 
 }
