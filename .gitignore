@@ -400,4 +400,6 @@ FodyWeavers.xsd
 #for seq
 *.junk
 *.tick
+*.2.metadata
 *.metadata
+stream.2.metadata

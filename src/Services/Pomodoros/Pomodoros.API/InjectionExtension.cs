@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text;
 using Localization.Grpc.Protos;
 using SharedKernal.CacheService;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Pomodoros.API
 {
@@ -197,6 +198,22 @@ namespace Pomodoros.API
                     options.SupportedUICultures = cultures;
                 });
         }
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services,
+          IConfiguration configuration)
+        {
+            
+               services.AddHealthChecks()
+                    .AddMongoDb(configuration["NoSqlDatabaseSettings:ConnectionString"]
+                    , "MongoDb Health", HealthStatus.Degraded)
+                    .AddSqlServer(configuration["DatabaseSettings:AppSettingsDBConnection"],
+                    name: "SQL Server",
+                    failureStatus: HealthStatus.Degraded,
+                    tags: new[] { "db", "sql", "database" });
+
+            return services;
+        }
+
     }
 
 }

@@ -1,8 +1,10 @@
 using Hangfire;
 using Hangfire.Dashboard;
+using HealthChecks.UI.Client;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +49,8 @@ namespace Tasks.Job
 
            // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
             services.AddHangfireServer();
+
+            services.AddHealthMonitoring();
         }
 
         
@@ -65,6 +69,11 @@ namespace Tasks.Job
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Tasks Job");
+                });
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
 
