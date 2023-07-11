@@ -168,3 +168,12 @@ services:
     ports:
       - "5707:80"
 
+
+  todo.aggregator.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "TodoAggregatorConfig:TasksUrl=http://tasks.api"
+      - "TodoAggregatorConfig:PomodoroUrl=http://pomodoros.api/"
+    ports:
+      - "5708:80"
+

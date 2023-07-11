@@ -19,7 +19,7 @@ using SharedKernal.Common.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Logging;
 
-namespace Tawakkalna.Integration.RestClient
+namespace SharedKernal.Integration.RestClient
 {
 
 
@@ -435,8 +435,10 @@ namespace Tawakkalna.Integration.RestClient
 
         private async Task<string> AuthenticateAsync()
         {
-            // //var cacheToken = TokenCacheObject.GetToken();
-            ////
+            var userToken = _httpContextAccessor?.HttpContext?.Request?
+                .Headers["Authorization"].ToString();
+            if (userToken != null)
+                return userToken.Replace("Bearer ","");               
 
             var input = new ClientAuth(_config["ClientAuth:clientId"], 
                 _config["ClientAuth:clientSecret"]);
@@ -450,8 +452,6 @@ namespace Tawakkalna.Integration.RestClient
             var tk = JsonConvert.DeserializeObject<TokenResponse>(token);
             return tk.Token;
 
-            //// TokenCacheObject.AddToken(tk, DateTime.Now.AddMinutes(90));
-            // return tk;
 
         }
 

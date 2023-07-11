@@ -9,7 +9,7 @@ using SharedKernal.Core.Interfaces.RestClient;
 using System.Reflection;
 using HealthChecks.UI.Client;
 using AutoMapper;
-using Tawakkalna.Integration.RestClient;
+using SharedKernal.Integration.RestClient;
 using RabbitMQ.Client;
 using System;
 
