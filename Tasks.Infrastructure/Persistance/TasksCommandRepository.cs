@@ -17,9 +17,10 @@ namespace Tasks.Infrastructure.Persistance
         {
             _context = context;
         }
-        public async  Task CreateTask(TasksEntity tasks)
+        public async  Task<string> CreateTask(TasksEntity tasks)
         {
             await _context.TasksCollection.InsertOneAsync(tasks);
+            return tasks.Id;
         }
 
         public async Task<bool> DeleteTask(string Id)

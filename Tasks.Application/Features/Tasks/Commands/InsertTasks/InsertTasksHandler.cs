@@ -38,13 +38,18 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
 
             //if havereminder is set and due date is defined
             //create the job
+            request.CreatedBy = userId;
+            request.LastModifiedBy = userId;
+            request.LastModifiedDate = DateTime.Now;
+            request.CreatedDate = DateTime.Now;
+            
 
             var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             createTaskRepoRequest.userId = Convert.ToInt64(userId);
-            await _tasksCommandsRepository.CreateTask(createTaskRepoRequest);
+            var resp =await _tasksCommandsRepository.CreateTask(createTaskRepoRequest);
             await PublishEvent(request, userId);
 
-            return new InsertTasksResponse();
+            return new InsertTasksResponse { Id = resp};
 
 
         }

@@ -57,6 +57,9 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
                 && getOlderVals.ReminderDateTime != request.ReminderDateTime)
                 request.isNotifiedForReminder = false;
 
+
+            request.LastModifiedBy = userId;
+            request.LastModifiedDate = DateTime.Now;
             var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
             updateTaskRepoRequest.userId = Convert.ToInt64(userId);
             var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);
