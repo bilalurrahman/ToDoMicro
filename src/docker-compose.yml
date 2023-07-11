@@ -74,10 +74,17 @@ services:
       context: .
       dockerfile: HealthMonitor/HealthMonitor.UI/Dockerfile
 
+  todo.aggregator.api:
+    image: ${DOCKER_REGISTRY-}todoaggregatorapi
+    build:
+      context: .
+      dockerfile: ApiGateway/Todo.Aggregator/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
   mongo_data:
+
 
 
 
