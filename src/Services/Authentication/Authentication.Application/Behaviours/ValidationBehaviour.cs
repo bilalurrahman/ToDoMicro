@@ -42,7 +42,7 @@ namespace Authentication.Application.Behaviours
                         };
                         customValidation.Add(customValid);
                     }
-                    var call = new CustomValidation(customValidation);
+                    new CustomValidation(customValidation);
 
                     //throw new ValidationException(failures); //make this customizable
                 }

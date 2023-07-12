@@ -13,20 +13,22 @@ namespace SharedKernal.Common.Exceptions
         public string PropertyName { get; set; }
     }
 
-    public class CustomValidation
+    public class CustomValidation: Resources.Resources
     {
         public CustomValidation(List<CustomValidationModel> valdations)
         {
-            string allValidations = "";
+            
+            string Resource = "";
             if (valdations != null)
             {
                 foreach(var validation in valdations)
-                {
-                    allValidations += $"{validation.ErrorCode}:" +
-                        validation.ErrorMessage + "  \n\r";
+                {                   
+                    Resource = $"{validation.ErrorCode}_{validation.PropertyName}";
+                    break;
                 }
             }
-            throw new ValidationsException(LogEventIds.ValidationEventIds.NotEmptyOrOthers.Id, allValidations);
+            int logId = LogEventIds.ValidationEventIds.NotEmptyOrOthers.Id;          
+            throw new ValidationsException(logId, GetResources(Resource.ToUpper()));
         }
     }
 }
