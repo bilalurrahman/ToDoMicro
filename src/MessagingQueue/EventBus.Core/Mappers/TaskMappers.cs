@@ -32,7 +32,10 @@ namespace EventBus.Core.Mappers
                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                .ForMember(dest => dest.isDeleted, opt => opt.MapFrom(src => src.isDeleted))
                .ForMember(dest => dest.SubTasks, opt => opt.MapFrom(src => MapFromSourceToDestinationOnConsume(src.SubTasks)))
-               .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue));
+               .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue))
+               .ForMember(dest => dest.IsRepeat, opt => opt.MapFrom(src => src.IsRepeat))
+               .ForMember(dest => dest.RepeatFrequency, opt => opt.MapFrom(src => src.RepeatFrequency))
+               .ForMember(dest => dest.NextDueDateForRepeat, opt => opt.MapFrom(src => src.NextDueDateForRepeat));
 
             CreateMap<UpdateTasksDueDateEvent, UpdateTaskRequestModel>()
               .ForMember(dest => dest.isActive, opt => opt.MapFrom(src => src.isActive))
@@ -52,7 +55,36 @@ namespace EventBus.Core.Mappers
               .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
               .ForMember(dest => dest.isDeleted, opt => opt.MapFrom(src => src.isDeleted))
               .ForMember(dest => dest.SubTasks, opt => opt.MapFrom(src => MapFromSourceToDestinationOnConsume(src.SubTasks)))
-              .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue));
+              .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue))
+               .ForMember(dest => dest.IsRepeat, opt => opt.MapFrom(src => src.IsRepeat))
+               .ForMember(dest => dest.RepeatFrequency, opt => opt.MapFrom(src => src.RepeatFrequency))
+               .ForMember(dest => dest.NextDueDateForRepeat, opt => opt.MapFrom(src => src.NextDueDateForRepeat));
+
+           
+
+
+            CreateMap<UpdateTaskNextDueDateEvent, UpdateTaskRequestModel>()
+                .ForMember(dest => dest.isActive, opt => opt.MapFrom(src => src.isActive))
+                .ForMember(dest => dest.isPinned, opt => opt.MapFrom(src => src.isPinned))
+                .ForMember(dest => dest.isCompleted, opt => opt.MapFrom(src => src.isCompleted))
+                .ForMember(dest => dest.userId, opt => opt.MapFrom(src => src.userId))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+                .ForMember(dest => dest.HaveReminder, opt => opt.MapFrom(src => src.HaveReminder))
+                .ForMember(dest => dest.ReminderDateTime, opt => opt.MapFrom(src => src.ReminderDateTime))
+                .ForMember(dest => dest.isNotifiedForReminder, opt => opt.MapFrom(src => src.isNotifiedForReminder))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.LastModifiedBy, opt => opt.MapFrom(src => src.LastModifiedBy))
+                .ForMember(dest => dest.LastModifiedDate, opt => opt.MapFrom(src => src.LastModifiedDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.isDeleted, opt => opt.MapFrom(src => src.isDeleted))
+                .ForMember(dest => dest.SubTasks, opt => opt.MapFrom(src => MapFromSourceToDestinationOnConsume(src.SubTasks)))
+                .ForMember(dest => dest.isNotifiedForDue, opt => opt.MapFrom(src => src.isNotifiedForDue))
+                .ForMember(dest => dest.IsRepeat, opt => opt.MapFrom(src => src.IsRepeat))
+                .ForMember(dest => dest.RepeatFrequency, opt => opt.MapFrom(src => src.RepeatFrequency))
+                .ForMember(dest => dest.NextDueDateForRepeat, opt => opt.MapFrom(src => src.NextDueDateForRepeat));
 
         }
 

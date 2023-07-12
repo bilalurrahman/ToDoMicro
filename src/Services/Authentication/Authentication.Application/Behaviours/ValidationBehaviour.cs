@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using SharedKernal.Common.Exceptions;
 using ValidationException = Authentication.Application.Exceptions.ValidationException;
 namespace Authentication.Application.Behaviours
 {
@@ -29,9 +30,23 @@ namespace Authentication.Application.Behaviours
                 var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
                 var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
-                if (failures.Count != 0)
-                    throw new ValidationException(failures);
-            }
+                if (failures.Count != 0) {
+                    var customValidation = new List<CustomValidationModel>();
+                    foreach(var failure in failures)
+                    {
+                        var customValid = new CustomValidationModel
+                        {
+                            ErrorCode = failure.ErrorCode,
+                            ErrorMessage = failure.ErrorMessage,
+                            PropertyName = failure.PropertyName
+                        };
+                        customValidation.Add(customValid);
+                    }
+                    var call = new CustomValidation(customValidation);
+
+                    //throw new ValidationException(failures); //make this customizable
+                }
+            } 
 
             return await next();
         }

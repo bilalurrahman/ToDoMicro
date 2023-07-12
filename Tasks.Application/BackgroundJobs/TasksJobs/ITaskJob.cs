@@ -12,6 +12,7 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
         Task <List<TasksEntity>> DueDateCheck();
 
         Task<List<TasksEntity>> ReminderCheck();
+        Task<List<TasksEntity>> NextDueDateCheck();
 
     }
 }

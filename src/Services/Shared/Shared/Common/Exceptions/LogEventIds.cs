@@ -25,7 +25,14 @@ namespace SharedKernal.Common.Exceptions
 
         public class CommonEventIds
         {
-            public static EventId UserNotAvailable => new EventId(300001, CommonExceptionResources.InternalServerError);
+            public static EventId InternalServerError => new EventId(300001, CommonExceptionResources.InternalServerError);
+        }
+
+
+        public class ValidationEventIds
+        {
+            public static EventId NotEmptyOrOthers => new EventId(400001, ValidationExceptionResources.UserShouldNotBeEmpty);
+
         }
     }
 }

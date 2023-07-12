@@ -48,6 +48,25 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 
 
             //get the older values
+            await DomainBusiness(request, userId);
+            var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
+            updateTaskRepoRequest.userId = Convert.ToInt64(userId);
+            var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);
+            if (!response)
+                throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Id,
+                       LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Name);
+
+            await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(updateTaskRepoRequest));
+
+
+            return new UpdateTaskResponse
+            {
+                isSuccess = response
+            };
+        }
+
+        private async Task DomainBusiness(UpdateTaskRequest request, string userId)
+        {
             var getOlderVals = await _taskQueryRepository.Get(request.Id); //get the value from cache?
 
             ////match the due date and reminder date and set the values of isnotified due to false and isnotified reminder to false.
@@ -60,20 +79,12 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
 
             request.LastModifiedBy = userId;
             request.LastModifiedDate = DateTime.Now;
-            var updateTaskRepoRequest = _mapper.Map<TasksEntity>(request);
-            updateTaskRepoRequest.userId = Convert.ToInt64(userId);
-            var response = await _tasksCommandsRepository.UpdateTask(updateTaskRepoRequest);
-            if (!response)
-                throw new EntityNotFoundException(LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Id,
-                       LogEventIds.EntityNotFoundEventIds.TaskIdNotFound.Name);
-
-            await _distributedCache.SetStringAsync(request.Id, JsonConvert.SerializeObject(updateTaskRepoRequest));
-
-            
-            return new UpdateTaskResponse
+            if (request?.IsRepeat == true)
             {
-                isSuccess = response
-            };
+                request.NextDueDateForRepeat =
+                   request.DueDate.AddDays((double)request.RepeatFrequency);
+            }
+
         }
     }
 }
