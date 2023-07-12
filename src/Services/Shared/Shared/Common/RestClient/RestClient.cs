@@ -65,19 +65,19 @@ namespace SharedKernal.Integration.RestClient
 
                 return response;
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(url,
-                //    "GET",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(url,
+                    "GET",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -95,19 +95,19 @@ namespace SharedKernal.Integration.RestClient
                     url,
                     (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(url,
-                //    "GET",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(url,
+                    "GET",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -136,19 +136,19 @@ namespace SharedKernal.Integration.RestClient
 
                 return response;
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "POST",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "POST",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -169,19 +169,19 @@ namespace SharedKernal.Integration.RestClient
                     url,
                     (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "POST",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "POST",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -208,19 +208,19 @@ namespace SharedKernal.Integration.RestClient
 
                 return response;
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "PUT",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "PUT",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -241,19 +241,19 @@ namespace SharedKernal.Integration.RestClient
                      url,
                      (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "PUT",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "PUT",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -280,19 +280,19 @@ namespace SharedKernal.Integration.RestClient
 
                 return response;
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "PATCH",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "PATCH",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -313,19 +313,19 @@ namespace SharedKernal.Integration.RestClient
                     url,
                     (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(request,
-                //    "PATCH",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(request,
+                    "PATCH",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -350,19 +350,19 @@ namespace SharedKernal.Integration.RestClient
 
                 return response;
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(url,
-                //    "DELETE",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(url,
+                    "DELETE",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -381,18 +381,18 @@ namespace SharedKernal.Integration.RestClient
                     url,
                     (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(url,
-                //    "DELETE",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
-                throw ex;
+                LogFailed(url,
+                    "DELETE",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
+                throw;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -413,19 +413,19 @@ namespace SharedKernal.Integration.RestClient
                     url,
                     (DateTime.Now - start));
             }
-            catch (CommonException ex)
+            catch (RestCommunicationException ex)
             {
-                //LogFailed(url,
-                //    "DELETE",
-                //    url,
-                //    (DateTime.Now - start),
-                //    ex);
+                LogFailed(url,
+                    "DELETE",
+                    url,
+                    (DateTime.Now - start),
+                    ex);
 
-                throw ex;
+                throw ;
             }
             catch (Exception ex)
             {
-                throw new CommonException(ex.Message);
+                throw new RestCommunicationException(ex.Message);
             }
         }
 
@@ -461,16 +461,9 @@ namespace SharedKernal.Integration.RestClient
 
         private async Task<T> SendAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> senderFunc)
         {
-            //var client = _httpClientFactory.CreateClient();
-            //client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(Thread.CurrentThread.CurrentUICulture.Name));
-            //client.DefaultRequestHeaders.Add("TraceId", Activity.Current?.Id ?? _httpContextAccessor.HttpContext.TraceIdentifier);
-
             var client = _httpClientFactory.CreateClient();
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-us");
-
             //client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(Thread.CurrentThread.CurrentUICulture.Name));            
-
-
             var tokenClient = await AuthenticateAsync();
 
 
@@ -507,11 +500,8 @@ namespace SharedKernal.Integration.RestClient
                     {
                         case HttpStatusCode.BadRequest:
                             {
-                                //var integrationExceptionCode = (IntegrationExceptionCode)Enum.Parse(typeof(IntegrationExceptionCode), errorCode.ToString());
-                                //var responseError = await DeserializeFromHttpContent<ErrorResponse>(res.Content);
-                                //var message = responseError?.Error;
-
-                                throw new CommonException($"Status: {HttpStatusCode.BadRequest}; Message: Bad Request ");
+                                throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.BadRequestError.Id,
+                                    LogEventIds.RestCommunicationEventIds.BadRequestError.Name);
                             }
                         case HttpStatusCode.Forbidden:
                         case HttpStatusCode.NotFound:
@@ -524,23 +514,23 @@ namespace SharedKernal.Integration.RestClient
                             {
                                 retryIndex++;
                                 if (retryIndex == 3)
-                                {
-                                    
-                                    throw new CommonException("Sorry tried 3 times");
+                                {                                   
+                                    throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Id,
+                                        LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Name);
                                 }
                                 break;
                             }
 
                         default:
                             {
-                                var message = (await DeserializeFromHttpContent<dynamic>(res.Content))?.Error;
-
-                                throw new CommonException(message);
+                                var message = (await DeserializeFromHttpContent<dynamic>(res.Content))?.Error;                               
+                                throw new RestCommunicationException(message);
                             }
                     }
                 }
             }
-            throw new CommonException("Sorry..Please try again later");
+            throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Id,
+                                        LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Name);
         }
 
 
@@ -573,7 +563,8 @@ namespace SharedKernal.Integration.RestClient
             catch (Exception ex)
             {
                 _logger.LogError(ex, contentAsString);
-                throw new CommonException("Sorry.....Please try again later.");
+                throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Id,
+                                        LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Name);
             }
         }
         private async Task<byte[]> DeserializeFileHttpContent(HttpContent content)
@@ -593,18 +584,12 @@ namespace SharedKernal.Integration.RestClient
             catch (Exception ex)
             {
                 _logger.LogError(ex, "file Contnet desrialization Error");
-                throw new CommonException("Sorry.....Please try again later.");
+                throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Id,
+                                        LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Name);
             }
         }
 
-      
 
-
-        private class RefreshTokenRequest
-        {
-            [JsonProperty("refreshToken")]
-            public string RefreshToken { get; set; }
-        }
         private class ClientAuth
         {
             [JsonProperty("ClientUsername")]
@@ -623,34 +608,7 @@ namespace SharedKernal.Integration.RestClient
             public string RefreshToken { get; set; }
             public DateTime RefreshTokenExpiry { get; set; }
         }
-        private class RefreshTokenResponse
-        {
-            [JsonProperty("access_token")]
-            public string AccessToken { get; set; }
-
-            [JsonProperty("expires_in")]
-            public int ExpiresIn { get; set; }
-
-            [JsonProperty("not_before_policy")]
-            public int? NotBeforePolicy { get; set; }
-
-            [JsonProperty("refresh_expires_in")]
-            public int RefreshExpiresIn { get; set; }
-
-            [JsonProperty("refresh_token")]
-            public string RefreshToken { get; set; }
-
-            [JsonProperty("scope")]
-            public string Scope { get; set; }
-
-            [JsonProperty("session_state")]
-            public string SessionState { get; set; }
-
-            [JsonProperty("token_type")]
-            public string TokenType { get; set; }
-        }
-
-    
+     
 
         #region Logging
 
@@ -659,80 +617,28 @@ namespace SharedKernal.Integration.RestClient
             string proxyAction,
             string proxyUrl,
             TimeSpan proxyCallDuration)
-        {
-           
-                
-                _logger.LogInformation("Successfully called the api");
-              
+        {                           
+                _logger.LogInformation($"Successful REST API Call:- " +
+                    $"Request: {proxyRequest} " +
+                    $"Response: {proxyResponse} " +
+                    $"Action: {proxyAction} " +
+                    $"Url: {proxyUrl} " +
+                    $"Duration: {proxyCallDuration}");              
         }
 
-        //private void LogFailed(object proxyRequest,
-        //    string proxyAction,
-        //    string proxyUrl,
-        //    TimeSpan proxyCallDuration,
-        //    IntegrationException ex)
-        //{
-        //    if (!proxyUrl.ToLower().EndsWith("/api/core/user/public/login") && !proxyUrl.ToLower().EndsWith("/api/core/user/public"))
-        //    {
-        //        var logger = _logger
-        //        .ForContext("ProxyAction", proxyAction)
-        //        .ForContext("ProxyUrl", proxyUrl)
-        //        .ForContext("ProxyCode", (int)ex.Code)
-        //        .ForContext("ProxyCodeName", ex.Code.ToString())
-        //        .ForContext("ProxyCallDuration", proxyCallDuration.TotalMilliseconds)
-        //        .ForContext("ProxyRequest", proxyRequest, true)
-        //        .ForContext("ServerName", Environment.MachineName)
-        //        .ForContext("TraceIdentifier", Activity.Current?.Id ?? _httpContextAccessor.HttpContext.TraceIdentifier)
-        //        .ForContext("IsAuthenticated", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated)
-        //        .ForContext("Username", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true ? _httpContextAccessor.HttpContext.User?.Identity?.Name : "Not Authenticated");
-        //        if (ex.Code == IntegrationExceptionCode.BadRequest)
-        //        {
-        //            logger.Information(ex, "PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-        //            proxyAction,
-        //            proxyUrl,
-        //            (int)ex.Code,
-        //            proxyCallDuration.TotalMilliseconds);
-        //        }
-        //        else
-        //        {
-        //            logger.Error(ex, "PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-        //            proxyAction,
-        //            proxyUrl,
-        //            (int)ex.Code,
-        //            proxyCallDuration.TotalMilliseconds);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var logger = _logger
-        //        .ForContext("ProxyAction", proxyAction)
-        //        .ForContext("ProxyUrl", proxyUrl)
-        //        .ForContext("ProxyCode", (int)ex.Code)
-        //        .ForContext("ProxyCodeName", ex.Code.ToString())
-        //        .ForContext("ProxyCallDuration", proxyCallDuration.TotalMilliseconds)
-        //        .ForContext("ProxyRequest", "*******")
-        //        .ForContext("ServerName", Environment.MachineName)
-        //        .ForContext("TraceIdentifier", Activity.Current?.Id ?? _httpContextAccessor.HttpContext.TraceIdentifier)
-        //        .ForContext("IsAuthenticated", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated)
-        //        .ForContext("Username", _httpContextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true ? _httpContextAccessor.HttpContext.User?.Identity?.Name : "Not Authenticated");
-        //        if (ex.Code == IntegrationExceptionCode.BadRequest)
-        //        {
-        //            logger.Information(ex, "PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-        //            proxyAction,
-        //            proxyUrl,
-        //            (int)ex.Code,
-        //            proxyCallDuration.TotalMilliseconds);
-        //        }
-        //        else
-        //        {
-        //            logger.Error(ex, "PROXY {ProxyAction} {ProxyUrl} responded {ProxyCode} in {ProxyCallDuration:0.0000} ms",
-        //            proxyAction,
-        //            proxyUrl,
-        //            (int)ex.Code,
-        //            proxyCallDuration.TotalMilliseconds);
-        //        }
-        //    }
-        //}
+        private void LogFailed(object proxyRequest,
+            string proxyAction,
+            string proxyUrl,
+            TimeSpan proxyCallDuration,
+            RestCommunicationException ex)
+        {
+            _logger.LogInformation($"Successful REST API Call:- " +
+                   $"Request: {proxyRequest} " +
+                   $"Exception: {ex.Message} " +
+                   $"Action: {proxyAction} " +
+                   $"Url:{proxyUrl} " +
+                   $"Duration:{proxyCallDuration}");        
+        }
 
         #endregion
     }

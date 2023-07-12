@@ -34,5 +34,12 @@ namespace SharedKernal.Common.Exceptions
             public static EventId NotEmptyOrOthers => new EventId(400001, ValidationExceptionResources.UserShouldNotBeEmpty);
 
         }
+        public class RestCommunicationEventIds
+        {
+            public static EventId CommonCommunicationError => new EventId(500001, RestCommunicationExceptionResources.CommonCommunicationError);
+            public static EventId RetryAttemptedError => new EventId(500002, RestCommunicationExceptionResources.RetryAttemptedError);
+            public static EventId BadRequestError => new EventId(500003, RestCommunicationExceptionResources.BadRequestError);
+
+        }
     }
 }
