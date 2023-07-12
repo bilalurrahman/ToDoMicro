@@ -29,9 +29,11 @@ namespace Authentication.Application.Behaviours
                 var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
                 var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
-                if (failures.Count != 0)
-                    throw new ValidationException(failures);
-            }
+                if (failures.Count != 0) { 
+                  //  var x = failures.Where(x=>x.ErrorCode==)
+                    throw new ValidationException(failures); //make this customizable
+                }
+            } 
 
             return await next();
         }

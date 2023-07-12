@@ -40,6 +40,8 @@ namespace EventBus.Job
                 config.AddConsumer<ReminderDateNotificationEventConsumer>();
                 config.AddConsumer<UpdateDueDateEventConsumer>();
                 config.AddConsumer<UpdateReminderDateEventConsumer>();
+                config.AddConsumer<UpdateNextDueDateEventConsumer>();
+
 
                 config.UsingRabbitMq((ctx, cfg) => {
                     cfg.Host(configuration["EventBusSettings:HostAddress"]);

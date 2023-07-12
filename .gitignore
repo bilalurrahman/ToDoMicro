@@ -403,3 +403,5 @@ FodyWeavers.xsd
 *.2.metadata
 *.metadata
 stream.2.metadata
+*.temp
+*.back
