@@ -31,7 +31,7 @@ namespace SharedKernal.Common.Exceptions
 
         public class ValidationEventIds
         {
-            public static EventId UsernameNotFound => new EventId(400001, ValidationExceptionResources.UserShouldNotBeEmpty);
+            public static EventId NotEmptyOrOthers => new EventId(400001, ValidationExceptionResources.UserShouldNotBeEmpty);
 
         }
     }

@@ -66,6 +66,13 @@ namespace SharedKernal.Middlewares.ExceptionHandlers
                     error.StackTrace = ex.StackTrace;
 
                     break;
+                case ValidationsException ex:
+                    error.Status = (int)HttpStatusCode.BadRequest;
+                    error.ErrorCode = ex.ErrorEvent.Id;
+                    error.ErrorMessage = ex.ErrorEvent.Name;
+                    error.StackTrace = ex.StackTrace;
+
+                    break;
 
                 default:
                     error.Status = (int)HttpStatusCode.InternalServerError;
