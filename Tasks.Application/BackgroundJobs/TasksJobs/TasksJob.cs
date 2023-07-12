@@ -52,6 +52,25 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
             return response;
         }
 
+        public async Task<List<TasksEntity>> NextDueDateCheck()
+        {
+            var response = await _tasksQueryRepository.GetAllForReminderJob();
+
+            foreach (var resp in response)
+            {
+                var publishNextDueRequest = _imapper.Map<UpdateTaskNextDueDateEvent>(resp);
+
+                if (resp?.IsRepeat == true && resp?.NextDueDateForRepeat==DateTime.Now)
+                {
+                    resp.DueDate = (DateTime)resp?.NextDueDateForRepeat;
+                }
+
+                await _ibus.Publish(publishNextDueRequest);
+            }
+
+            return response;
+        }
+
         public async Task<List<TasksEntity>> ReminderCheck()
         {
             var response = await _tasksQueryRepository.GetAllForReminderJob();

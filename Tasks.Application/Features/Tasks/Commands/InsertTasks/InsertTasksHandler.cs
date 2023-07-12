@@ -31,27 +31,44 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
         public async Task<InsertTasksResponse> Handle(InsertTasksRequest request, CancellationToken cancellationToken)
         {
             var userId = _httpContextHelper.CurrentLoggedInId;
-            if(string.IsNullOrEmpty(request?.Title))
+            if (string.IsNullOrEmpty(request?.Title))
                 throw new BusinessRuleException(LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Id, LogEventIds.BusinessRuleEventIds.TitleCantBeEmpty.Name);
 
 
 
             //if havereminder is set and due date is defined
             //create the job
+            DomainBusiness(request, userId);
+
+            var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
+            createTaskRepoRequest.userId = Convert.ToInt64(userId);
+            var resp = await _tasksCommandsRepository.CreateTask(createTaskRepoRequest);
+            await PublishEvent(request, userId);
+
+            return new InsertTasksResponse { Id = resp };
+
+
+        }
+
+        private static void DomainBusiness(InsertTasksRequest request, string userId)
+        {
             request.CreatedBy = userId;
             request.LastModifiedBy = userId;
             request.LastModifiedDate = DateTime.Now;
             request.CreatedDate = DateTime.Now;
-            
-
-            var createTaskRepoRequest = _mapper.Map<TasksEntity>(request);
-            createTaskRepoRequest.userId = Convert.ToInt64(userId);
-            var resp =await _tasksCommandsRepository.CreateTask(createTaskRepoRequest);
-            await PublishEvent(request, userId);
-
-            return new InsertTasksResponse { Id = resp};
-
-
+            if (request.DueDate < DateTime.Now)
+            {
+                request.DueDate = DateTime.Now
+                    .AddHours(23)
+                    .AddMinutes(59)
+                    .AddSeconds(59);
+            }
+            if (request?.IsRepeat==true)
+            {
+                
+                request.NextDueDateForRepeat =
+                    request.DueDate.AddDays((double)request.RepeatFrequency);
+            }
         }
 
         private async Task PublishEvent(InsertTasksRequest request, string userId)

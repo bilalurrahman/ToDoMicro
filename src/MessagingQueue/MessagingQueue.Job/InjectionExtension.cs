@@ -65,6 +65,11 @@ namespace EventBus.Job
                     cfg.ReceiveEndpoint(EventBusConstants.ReminderDateUpdateQueue, c =>
                     {
                         c.ConfigureConsumer<UpdateReminderDateEventConsumer>(ctx);
+                    }); 
+                    
+                    cfg.ReceiveEndpoint(EventBusConstants.NextDateUpdateQueue, c =>
+                    {
+                        c.ConfigureConsumer<UpdateNextDueDateEventConsumer>(ctx);
                     });
                 });
 
