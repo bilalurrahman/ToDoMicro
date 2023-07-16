@@ -18,6 +18,7 @@ using SharedKernal.Core.Interfaces.RestClient;
 using SharedKernal.Common.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Logging;
+using SharedKernal.Common.FaultTolerance;
 
 namespace SharedKernal.Integration.RestClient
 {
@@ -474,11 +475,9 @@ namespace SharedKernal.Integration.RestClient
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenClient);
             }
 
-
-            int retryIndex = 0;
-            while (retryIndex < 3)
-            {
-                var res = await senderFunc(client);
+            
+                var res = await Resiliance.serviceFaultPolicy(_logger).Result.ExecuteAsync(async () =>
+                    await senderFunc(client));
 
                 if (res.IsSuccessStatusCode)
                 {
@@ -511,14 +510,9 @@ namespace SharedKernal.Integration.RestClient
                         case HttpStatusCode.Locked:
                         case HttpStatusCode.Unauthorized:
                         case HttpStatusCode.InternalServerError:
-                            {
-                                retryIndex++;
-                                if (retryIndex == 3)
-                                {                                   
-                                    throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Id,
-                                        LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Name);
-                                }
-                                break;
+                            {     
+                            throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Id,
+                                        LogEventIds.RestCommunicationEventIds.RetryAttemptedError.Name);                                                             
                             }
 
                         default:
@@ -528,7 +522,7 @@ namespace SharedKernal.Integration.RestClient
                             }
                     }
                 }
-            }
+            
             throw new RestCommunicationException(LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Id,
                                         LogEventIds.RestCommunicationEventIds.CommonCommunicationError.Name);
         }

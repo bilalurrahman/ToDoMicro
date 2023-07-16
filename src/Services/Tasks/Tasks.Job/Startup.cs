@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using SharedKernal.Common.HttpContextHelper;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace Tasks.Job
             }
             app.HangfireConfigure();
             app.UseRouting();
-            
+            app.UseSerilogRequestLogging();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
