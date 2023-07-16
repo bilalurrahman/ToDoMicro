@@ -44,22 +44,22 @@ namespace SharedKernal.Common.FaultTolerance
 
             return finalPolicy;
         }
-        public static async Task<Polly.Wrap.AsyncPolicyWrap> mongoDbFaultPolicy(ILogger logger)
+        public static Polly.Wrap.PolicyWrap RabbitFaultPolicy()
         {
-            var retry = Policy.Handle<MongoException>()
-                            .WaitAndRetryAsync(
+            var retry = Policy.Handle<Exception>()
+                            .WaitAndRetry(
                                 retryCount: 5,
                                 sleepDurationProvider: retryAttempt =>
                                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                                 onRetry: (exception, retryCount, context) =>
                                 {
-                                    logger.LogError($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                                    //logger.LogError($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
                                 });
 
             var circuitBreaker = Policy.Handle<Exception>()
-                .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30));
+                .CircuitBreaker(3, TimeSpan.FromSeconds(30));
 
-            var finalPolicy = retry.WrapAsync(circuitBreaker);
+            var finalPolicy = retry.Wrap(circuitBreaker);
 
 
             return finalPolicy;

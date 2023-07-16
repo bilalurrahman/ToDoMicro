@@ -18,17 +18,18 @@ namespace EventBus.Consumer.Tasks
         private readonly IMapper _mapper;
         protected string _updateTaskUrl => "http://tasks.api/Tasks/";
 
-        public UpdateDueDateEventConsumer(ILogger<UpdateDueDateEventConsumer> logger, IMapper mapper)
+        public UpdateDueDateEventConsumer(ILogger<UpdateDueDateEventConsumer> logger, IMapper mapper, IRestClient restClient)
         {
             _logger = logger;
             _mapper = mapper;
+            _restClient = restClient;
         }
 
         public async Task Consume(ConsumeContext<UpdateTasksDueDateEvent> context)
         {
             var updateTaskRepoRequest = _mapper.Map<UpdateTaskRequestModel>(context?.Message);
           
-            var response = await _restClient.PutAsync<string, UpdateTaskRequestModel>(_updateTaskUrl, updateTaskRepoRequest);
+            await _restClient.PutAsync<string, UpdateTaskRequestModel>(_updateTaskUrl, updateTaskRepoRequest);
 
 
             _logger.LogInformation("Due Date Updated Succeffully ");

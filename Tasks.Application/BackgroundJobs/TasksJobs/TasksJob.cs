@@ -60,9 +60,10 @@ namespace Tasks.Application.BackgroundJobs.TasksJobs
             {
                 var publishNextDueRequest = _imapper.Map<UpdateTaskNextDueDateEvent>(resp);
 
-                if (resp?.IsRepeat == true && resp?.NextDueDateForRepeat == DateTime.Now)
+                if (resp?.IsRepeat == true && resp?.NextDueDateForRepeat.Value.Date == DateTime.Now.Date)
                 {
                     resp.DueDate = (DateTime)resp?.NextDueDateForRepeat;
+                    resp.isCompleted = false;
                 }
 
                 await _ibus.Publish(publishNextDueRequest);

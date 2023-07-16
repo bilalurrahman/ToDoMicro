@@ -12,6 +12,7 @@ using AutoMapper;
 using SharedKernal.Integration.RestClient;
 using RabbitMQ.Client;
 using System;
+using SharedKernal.Common.FaultTolerance;
 
 namespace EventBus.Job
 {
@@ -91,7 +92,8 @@ namespace EventBus.Job
                 Uri = new Uri(connStr),
                 AutomaticRecoveryEnabled = true
             };
-            var connection = factory.CreateConnection();
+            
+            var connection = Resiliance.RabbitFaultPolicy().Execute(() => factory.CreateConnection());
             services.AddSingleton(connection)
                 .AddHealthChecks()
                .AddRabbitMQ();

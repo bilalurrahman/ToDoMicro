@@ -56,9 +56,10 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
             request.LastModifiedBy = userId;
             request.LastModifiedDate = DateTime.Now;
             request.CreatedDate = DateTime.Now;
-            if (request.DueDate < DateTime.Now)
+            if (request.DueDate.Date < DateTime.Now.Date)
             {
-                request.DueDate = DateTime.Now
+                TimeSpan time = new TimeSpan(23, 59, 59);
+                request.DueDate = DateTime.Today
                     .AddHours(23)
                     .AddMinutes(59)
                     .AddSeconds(59);
@@ -84,8 +85,7 @@ namespace Tasks.Application.Features.Tasks.Commands.InsertTasks
                 title = request.Title
             };
             await _ibus.Publish(eventMessage);
-            //var eventPublisher = new EventPublisher<NewTaskEmailCreationEvent>(_ibus);
-            //await eventPublisher.Publish(eventMessage);
+
         }
     }
 }

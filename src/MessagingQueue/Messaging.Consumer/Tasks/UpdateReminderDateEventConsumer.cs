@@ -21,7 +21,9 @@ namespace EventBus.Consumer.Tasks
         private readonly ILogger<UpdateReminderDateEventConsumer> _logger;
         protected string _updateTaskUrl => "http://tasks.api/Tasks/";
 
-        public UpdateReminderDateEventConsumer(IMapper mapper, ILogger<UpdateReminderDateEventConsumer> logger, IRestClient restClient)
+        public UpdateReminderDateEventConsumer(IMapper mapper, 
+            ILogger<UpdateReminderDateEventConsumer> logger, 
+            IRestClient restClient)
         {
             _mapper = mapper;
             _logger = logger;
