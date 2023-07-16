@@ -13,13 +13,15 @@ using Tasks.Infrastructure.Persistance;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Hangfire.Dashboard;
+using System;
+using SharedKernal.Common.FaultTolerance;
+using Microsoft.Extensions.Logging;
 
 namespace Tasks.Job
 {
     public static class InjectionExtension
     {
-      
-
+        
 
         public static IServiceCollection AddCustomMediatr(this IServiceCollection services)
         {
@@ -88,8 +90,14 @@ namespace Tasks.Job
         }
 
         private static void TasksRecurringJobs()
+        {                       
+            Resiliance.retryPolicy().Execute(() => Jobs());
+        }
+
+       
+        private static void Jobs()
         {
-            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck", x => x.DueDateCheck(), Cron.MinuteInterval(15));//call from the appsettings.
+            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck", x => x.DueDateCheck(), Cron.MinuteInterval(15));
             RecurringJob.AddOrUpdate<ITaskJob>("ReminderDateCheck", x => x.ReminderCheck(), Cron.MinuteInterval(15));
             RecurringJob.AddOrUpdate<ITaskJob>("NextDueDateCheck", x => x.NextDueDateCheck(), Cron.Hourly);
         }
