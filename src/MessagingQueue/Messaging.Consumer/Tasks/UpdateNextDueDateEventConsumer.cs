@@ -14,7 +14,7 @@ using SharedKernal.Core.Interfaces.RestClient;
 
 namespace EventBus.Consumer.Tasks
 {
-    public class UpdateNextDueDateEventConsumer : IConsumer<UpdateTasksReminderDateEvent>
+    public class UpdateNextDueDateEventConsumer : IConsumer<UpdateTaskNextDueDateEvent>
     {
         private readonly IRestClient _restClient;
         private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace EventBus.Consumer.Tasks
             _restClient = restClient;
         }
 
-        public async Task Consume(ConsumeContext<UpdateTasksReminderDateEvent> context)
+        public async Task Consume(ConsumeContext<UpdateTaskNextDueDateEvent> context)
         {
             var updateTaskRepoRequest = _mapper.Map<UpdateTaskRequestModel>(context?.Message);
             var response = await _restClient.PutAsync<string, UpdateTaskRequestModel>(_updateTaskUrl, updateTaskRepoRequest);

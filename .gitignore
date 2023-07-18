@@ -405,3 +405,5 @@ FodyWeavers.xsd
 stream.2.metadata
 *.temp
 *.back
+*.index
+*.span

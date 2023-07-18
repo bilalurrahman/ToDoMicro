@@ -72,10 +72,10 @@ namespace Tasks.Application.Features.Tasks.Commands.UpdateTask
             ////match the due date and reminder date and set the values of isnotified due to false and isnotified reminder to false.
             if (getOlderVals.DueDate != request.DueDate)
                 request.isNotifiedForDue = false;
+
             if (request.HaveReminder
                 && getOlderVals.ReminderDateTime != request.ReminderDateTime)
                 request.isNotifiedForReminder = false;
-
 
             request.LastModifiedBy = userId;
             request.LastModifiedDate = DateTime.Now;

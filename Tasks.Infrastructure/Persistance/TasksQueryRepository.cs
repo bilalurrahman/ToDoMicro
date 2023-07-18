@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using SharedKernal.Common.FaultTolerance;
 using System;
@@ -59,6 +61,17 @@ namespace Tasks.Infrastructure.Persistance
                 p.isActive && 
                 p.ReminderDateTime < DateTime.Now && 
                 !p.isNotifiedForReminder).ToListAsync());
+        }
+
+        public async Task<List<TasksEntity>> GetAllForNextDue()
+        {
+
+           
+
+            return await ExecuteWithFaultPolicy(async () =>
+                await _context.TasksCollection.Find(p => p.IsRepeat==true 
+                && p.isActive
+                 ).ToListAsync());
         }
     }
 }
