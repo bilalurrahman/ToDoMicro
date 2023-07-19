@@ -23,6 +23,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SharedKernal.Common.HttpContextHelper;
 
 namespace Authentication.API
 {
@@ -82,6 +83,7 @@ namespace Authentication.API
             services.AddScoped<IJWTCreateToken, JWTCreateToken>();
             services.AddScoped<IUserQueryRepository, UserQueryRepository>();
             services.AddScoped<IUserCommandRepository, UserCommandRepository>();
+            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
 
 
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));

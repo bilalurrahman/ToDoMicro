@@ -10,5 +10,7 @@ namespace Authentication.Application.Contracts.Persistance
 
         Task<bool> UpdateRefreshToken(UserToken userToken);
 
+        Task<bool> InsertUserDevice(UserNotificationDevices userNotificationDevices);
+
     }
 }
