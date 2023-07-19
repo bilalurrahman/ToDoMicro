@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SharedKernal.Common.HttpContextHelper;
+using Microsoft.AspNetCore.Http;
 
 namespace Authentication.API
 {
@@ -80,10 +81,12 @@ namespace Authentication.API
         }
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
+            
+            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
             services.AddScoped<IJWTCreateToken, JWTCreateToken>();
             services.AddScoped<IUserQueryRepository, UserQueryRepository>();
             services.AddScoped<IUserCommandRepository, UserCommandRepository>();
-            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
+            
 
 
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));

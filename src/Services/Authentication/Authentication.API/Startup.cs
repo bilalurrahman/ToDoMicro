@@ -41,7 +41,7 @@ namespace Authentication.API
                                 .AllowAnyHeader();
                     });
             });
-
+            services.AddHttpContextAccessor();
             services.AddCustomAuth(Configuration);
             services.AddCustomFluentValidation(Configuration);
             services.AddCustomMediatr(Configuration);

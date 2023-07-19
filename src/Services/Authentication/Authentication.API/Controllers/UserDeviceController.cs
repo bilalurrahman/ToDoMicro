@@ -5,7 +5,9 @@ using Authentication.Application.Features.NotificationDevices.Command;
 
 namespace Authentication.API.Controllers
 {
-
+    [Route("[controller]")]
+    [Produces("application/json")]
+    [ApiController]
     public class UserDeviceController : ControllerBase
     {
         private readonly IMediator _mediator;

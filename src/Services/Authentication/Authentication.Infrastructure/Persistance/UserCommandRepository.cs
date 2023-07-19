@@ -86,14 +86,13 @@ namespace Authentication.Infrastructure.Persistance
             {
                 using (IDbConnection _dbConnection = this.GetConnection())
                 {
-                    string query = @"INSERT INTO [dbo].[UserNotificationDevices]
-                                       ([user_id]
-                                       ,[device_token]
-                                       )
-                                 VALUES
-                                       (@userid
-                                       ,@devicetoken
-                                       )";
+                    string query = @"INSERT INTO [UsersDb].[dbo].[UserNotificationDevices] ([user_id], [device_token])
+                                        SELECT @userid, @devicetoken
+                                        WHERE NOT EXISTS (
+                                            SELECT 1
+                                            FROM [dbo].[UserNotificationDevices]
+                                            WHERE [device_token] = @devicetoken
+                                        )";
 
                     await _dbConnection.ExecuteAsync(query,
                        new
