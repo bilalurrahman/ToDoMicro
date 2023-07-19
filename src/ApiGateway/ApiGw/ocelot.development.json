@@ -30,6 +30,21 @@
     },
 
 
+    {
+      "DownstreamPathTemplate": "/UserDevice",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authentication.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/UserDevice",
+      "UpstreamHttpMethod": [ "POST" ],
+      "FileCacheOptions": { "TtlSeconds": 30 }
+    },
+
+
 
     {
       "DownstreamPathTemplate": "/Tasks",
@@ -106,7 +121,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Pomodoro",
-      "UpstreamHttpMethod": [ "POST","PUT" ]
+      "UpstreamHttpMethod": [ "POST", "PUT" ]
     }
 
 
