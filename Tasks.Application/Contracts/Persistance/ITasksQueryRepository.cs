@@ -15,6 +15,7 @@ namespace Tasks.Application.Contracts
         Task<List<TasksEntity>> GetAllForJob();
 
         Task<List<TasksEntity>> GetAllForReminderJob();
+        Task<List<TasksEntity>> GetAllForNextDue();
 
     }
 }

@@ -24,5 +24,8 @@ namespace Tasks.Application.Features.Tasks.Queries
         public bool isNotifiedForDue { get; set; }
 
         public List<SubTasks> SubTasks { get; set; }
+        public bool? IsRepeat { get; set; } = false;
+        public int? RepeatFrequency { get; set; }
+        public DateTime? NextDueDateForRepeat { get; set; }
     }
 }

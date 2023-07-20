@@ -1,4 +1,5 @@
 ﻿using Announcement.Application.Contracts.Integration;
+using Announcement.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,16 +21,11 @@ namespace Announcement.API.Controllers.EmailControllers
         }
 
         [HttpPost("SendEmail")]
-        public async Task<ActionResult> SendEmail()
+        public async Task<ActionResult> SendEmail([FromBody] MailRequest mailRequest)
         {
             try {
                 await emailIntegration
-                .SendEmailAsync(new Application.Models.MailRequest
-                {
-                    Body = "Test Body for To do application",
-                    ToEmail = "bilal.ur.rahman2@gmail.com",
-                    Subject = "Test Subject"
-                });
+                .SendEmailAsync(mailRequest);
             }
             catch(Exception ex)
             {

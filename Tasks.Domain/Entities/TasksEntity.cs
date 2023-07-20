@@ -14,12 +14,16 @@ namespace Tasks.Domain.Entities
         public int Status { get; set; }
         public DateTime DueDate { get; set; }
 
-        public bool HaveReminder { get; set; }
+        public bool HaveReminder { get; set; } = false;
         public DateTime ReminderDateTime { get; set; }
         public bool isNotifiedForReminder { get; set; }
 
-        public bool isPinned { get; set; }
+        public bool isPinned { get; set; } = false;
         public bool isNotifiedForDue { get; set; }
+        public bool? IsRepeat { get; set; } = false;
+        public int? RepeatFrequency { get; set; }
+        public DateTime? NextDueDateForRepeat { get; set; }
         public List<SubTasks> SubTasks { get; set; }
     }
+
 }

@@ -9,7 +9,7 @@ namespace Tasks.Application.Contracts
 {
    public interface ITasksCommandsRepository
     {
-        Task CreateTask(TasksEntity tasks);
+        Task<string> CreateTask(TasksEntity tasks);
         Task<bool> UpdateTask(TasksEntity tasks);
 
         Task<bool> DeleteTask(string Id);

@@ -19,6 +19,9 @@ namespace EventsBus.Messages.Events.Tasks
         public bool isPinned { get; set; }
         public bool isNotifiedForDue { get; set; }
         public List<SubTasks> SubTasks { get; set; }
+        public bool? IsRepeat { get; set; } = false;
+        public int? RepeatFrequency { get; set; }
+        public DateTime? NextDueDateForRepeat { get; set; }
 
 
     }

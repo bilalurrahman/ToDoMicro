@@ -22,6 +22,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SharedKernal.Common.HttpContextHelper;
+using Microsoft.AspNetCore.Http;
 
 namespace Authentication.API
 {
@@ -78,12 +81,15 @@ namespace Authentication.API
         }
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
+            
+            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
             services.AddScoped<IJWTCreateToken, JWTCreateToken>();
             services.AddScoped<IUserQueryRepository, UserQueryRepository>();
             services.AddScoped<IUserCommandRepository, UserCommandRepository>();
+            
 
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             return services;
@@ -130,6 +136,24 @@ namespace Authentication.API
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;
                 });
+        }
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            string grpcServerUrl = "http://host.docker.internal:5701";
+                //(configuration["GrpcSettings:LocalizationUrl"]);
+
+            services.AddSingleton<GrpcHealthCheck>(new GrpcHealthCheck(grpcServerUrl));
+            services.AddHealthChecks()
+               .AddSqlServer(configuration["DatabaseSettings:UserDBQueryConnection"],
+                name: "SQL Server",
+                failureStatus: HealthStatus.Degraded,
+                tags: new[] { "db", "sql", "database" })
+             .AddCheck<SeqHealthCheck>("Seq")
+             .AddCheck<GrpcHealthCheck>("Grpc Localization");
+
+            return services;
         }
 
     }

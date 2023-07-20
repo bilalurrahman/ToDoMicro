@@ -4,9 +4,9 @@ using Pomodoros.Application.Contracts.Persistance.Query;
 using Pomodoros.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using SharedKernal.Common.FaultTolerance;
 
 namespace Pomodoros.Infrastructure.Persistance.Query
 {
@@ -14,18 +14,28 @@ namespace Pomodoros.Infrastructure.Persistance.Query
     {
 
         private readonly IPomodoroContext _context;
-        public QueryPomodorosRepository(IPomodoroContext context)
+        private readonly ILogger<QueryPomodorosRepository> logger;
+        public QueryPomodorosRepository(IPomodoroContext context, ILogger<QueryPomodorosRepository> logger)
         {
             _context = context;
+            this.logger = logger;
+        }
+        private async Task<T> ExecuteWithFaultPolicy<T>(Func<Task<T>> action)
+        {
+            return await
+                ExecuteWithFaultPolicy(async () => await Resiliance.serviceFaultPolicy(logger).Result.ExecuteAsync(action));
         }
         public async Task<PomodorosEntity> Get(string Id)
         {
-            return await _context.PomodorosCollection.Find(p => p.Id == Id).SingleOrDefaultAsync();
+            return await
+                ExecuteWithFaultPolicy(async () => await _context.PomodorosCollection.Find(p => p.Id == Id).SingleOrDefaultAsync());
         }
 
         public async Task<List<PomodorosEntity>> GetAll(string TaskId)
         {
-            return await _context.PomodorosCollection.Find(p => p.TaskId == TaskId).ToListAsync();
+            return await
+                ExecuteWithFaultPolicy(async () =>
+                await _context.PomodorosCollection.Find(p => p.TaskId == TaskId).ToListAsync());
         }
     }
 }

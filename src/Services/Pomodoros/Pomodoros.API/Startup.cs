@@ -23,6 +23,9 @@ using Pomodoros.Infrastructure.Context;
 using SharedKernal.Core.Interfaces.AppSettings;
 using SharedKernal.Infrastructure.Persistance.AppSettings;
 using SharedKernal;
+using SharedKernal.Middlewares.ExceptionHandlers;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Pomodoros.API
 {
@@ -52,6 +55,7 @@ namespace Pomodoros.API
             services.AddCustomMessagingQueue(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddSupportedCultureServices();
+            services.AddHealthMonitoring(Configuration);
 
 
             ContainerManager.Container = services.BuildServiceProvider();
@@ -77,6 +81,9 @@ namespace Pomodoros.API
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pomodoros.API v1"));
 
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.AddGlobalExceptionHandler();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -84,6 +91,12 @@ namespace Pomodoros.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
         }
     }

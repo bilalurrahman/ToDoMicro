@@ -1,18 +1,19 @@
 using Annoucement.Infrastructure.Integration;
 using Announcement.Application.Contracts.Integration;
 using Announcement.Application.Models;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using HealthChecks.UI.Client;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
-using MassTransit;
-using Announcement.Application.Features.MessageConsumer;
-using EventsBus.Messages.Common;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Announcement.API
 {
@@ -29,6 +30,12 @@ namespace Announcement.API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile("Resources/todo-app-fcm.json"),
+            });
+
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -36,35 +43,18 @@ namespace Announcement.API
             });
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            var domain = Assembly.Load(new AssemblyName("Announcement.Application"));
+            services.AddMediatR(typeof(Startup).Assembly, domain);
+
             services.AddTransient<IEmailIntegration, EmailIntegration>();
 
-            //Add Queue Here for masstransit
 
-            services.AddMassTransit(config =>
-            {
-                config.AddConsumer<NewTaskEmailCreationEventConsumer>();
-                config.AddConsumer<DueDateNotificationEventConsumer>();
-                config.AddConsumer<ReminderDateNotificationEventConsumer>();
-                config.UsingRabbitMq((ctx, cfg) => {
-                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+            services.AddScoped<IFireBaseIntegration, FireBaseIntegration>();
+            
 
-                    cfg.ReceiveEndpoint(EventBusConstants.NewTaskEmailCreationQueue, c =>
-                    {
-                        c.ConfigureConsumer<NewTaskEmailCreationEventConsumer>(ctx);
-                    });
 
-                    cfg.ReceiveEndpoint(EventBusConstants.DueDateNotificationQueue, c =>
-                    {
-                        c.ConfigureConsumer<DueDateNotificationEventConsumer>(ctx);
-                    }); 
-                    
-                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateNotificationQueue, c =>
-                    {
-                        c.ConfigureConsumer<ReminderDateNotificationEventConsumer>(ctx);
-                    });
-                });
-
-            });
+            services.AddHealthChecks();
 
         }
 
@@ -85,6 +75,11 @@ namespace Announcement.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
         }
     }

@@ -1,4 +1,8 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+using SharedKernal.Common.FaultTolerance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,29 +17,61 @@ namespace Tasks.Infrastructure.Persistance
     public class TasksQueryRepository : ITasksQueryRepository
     {
         private readonly ITasksContext _context;
-        public TasksQueryRepository(ITasksContext context)
+        private readonly ILogger<TasksQueryRepository> logger;
+        public TasksQueryRepository(ITasksContext context, ILogger<TasksQueryRepository> logger)
         {
             _context = context;
+            this.logger = logger;
+        }
+
+        private async Task<T> ExecuteWithFaultPolicy<T>(Func<Task<T>> action)
+        {
+            return await Resiliance.serviceFaultPolicy(logger).Result.ExecuteAsync(action);
         }
 
         public async Task<TasksEntity> Get(string id)
         {
-            return await _context.TasksCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
+            return await ExecuteWithFaultPolicy(async () => 
+            await _context.TasksCollection.Find(p => p.Id == id).FirstOrDefaultAsync());
+      
         }
 
         public async Task<List<TasksEntity>> GetAll(long userId)
         {
-            return await _context.TasksCollection.Find(p=> p.userId==userId).ToListAsync();
+            return await ExecuteWithFaultPolicy(async () =>
+           await _context.TasksCollection.Find(p => p.userId == userId).ToListAsync());
+                
         }
 
         public async Task<List<TasksEntity>> GetAllForJob()
         {
-            return await _context.TasksCollection.Find(p => p.isCompleted==false && p.isActive && p.DueDate<DateTime.Now && !p.isNotifiedForDue).ToListAsync();
+            return await ExecuteWithFaultPolicy(async () =>
+            await _context.TasksCollection.Find(p => p.isCompleted == false &&
+            p.isActive &&
+            p.DueDate < DateTime.Now &&
+            !p.isNotifiedForDue).ToListAsync());
+
+        
         }
 
         public async Task<List<TasksEntity>> GetAllForReminderJob()
         {
-            return await _context.TasksCollection.Find(p => p.isCompleted == false && p.isActive && p.DueDate < DateTime.Now && !p.isNotifiedForReminder).ToListAsync();
+            return await ExecuteWithFaultPolicy(async () =>
+                await _context.TasksCollection.Find(p => p.isCompleted == false && 
+                p.isActive && 
+                p.ReminderDateTime < DateTime.Now && 
+                !p.isNotifiedForReminder).ToListAsync());
+        }
+
+        public async Task<List<TasksEntity>> GetAllForNextDue()
+        {
+
+           
+
+            return await ExecuteWithFaultPolicy(async () =>
+                await _context.TasksCollection.Find(p => p.IsRepeat==true 
+                && p.isActive
+                 ).ToListAsync());
         }
     }
 }

@@ -1,13 +1,16 @@
 using Hangfire;
 using Hangfire.Dashboard;
+using HealthChecks.UI.Client;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using SharedKernal.Common.HttpContextHelper;
 using System;
 using System.Collections.Generic;
@@ -27,6 +30,8 @@ namespace Tasks.Job
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,33 +41,17 @@ namespace Tasks.Job
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddHttpContextAccessor();
-            var domain = Assembly.Load(new AssemblyName("Tasks.Application"));
-            services.AddAutoMapper(typeof(Startup).Assembly, domain);
-            services.AddMediatR(typeof(Startup).Assembly, domain);
+            services.AddCustomMediatr();
+            services.AddCustomMapper();
+            services.AddDependencies();
+            services.AddCustomCache(Configuration);
+            services.AddCustomConfiguration(Configuration);
+            services.AddCustomMessagingQueue(Configuration);
 
-            services.AddMassTransit(config =>
-            {
-                config.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
-                });
-            });
-
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = Configuration.GetValue<string>("CacheDbSettings:ConnectionString");
-            });
-
-
-            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
-            services.AddScoped<ITaskJob, TasksJob>();
-            services.AddScoped<ITasksContext, TasksContext>();
-            services.AddScoped<ITasksQueryRepository, TasksQueryRepository>();
-            services.AddScoped<ITasksCommandsRepository, TasksCommandRepository>();
-            services.Configure<NoSqlDataBaseSettings>(Configuration.GetSection("NoSqlDatabaseSettings"));
-            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
+           // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("TasksJobConnection")));
             services.AddHangfireServer();
+
+            services.AddHealthMonitoring();
         }
 
         
@@ -73,27 +62,24 @@ namespace Tasks.Job
             {
                 app.UseDeveloperExceptionPage();
             }
-            var options = new DashboardOptions()
-            {
-                Authorization = new[] { new MyAuthorizationFilter() }
-            };
-            app.UseHangfireDashboard("/hangfire", options);
+            app.HangfireConfigure();
             app.UseRouting();
-
+            app.UseSerilogRequestLogging();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Tasks Job");
                 });
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
 
-            RecurringJob.AddOrUpdate<ITaskJob>("DueDateCheck",x => x.DueDateCheck(),Cron.MinuteInterval(15));
-            RecurringJob.AddOrUpdate<ITaskJob>("ReminderDateCheck",x => x.ReminderCheck(),Cron.MinuteInterval(15));
+            
         }
-        public class MyAuthorizationFilter : IDashboardAuthorizationFilter
-        {
-            public bool Authorize(DashboardContext context) => true;
-        }
+        
     }
 }

@@ -24,10 +24,11 @@ using System.Text;
 using Tasks.Application.BackgroundJobs.TasksJobs;
 using Tasks.Application.Contracts;
 using Tasks.Application.Contracts.Context;
-using Tasks.Application.MessageConsumer;
 using Tasks.Application.Models;
 using Tasks.Infrastructure.Context;
 using Tasks.Infrastructure.Persistance;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 
 namespace Tasks.API
 {
@@ -167,26 +168,12 @@ namespace Tasks.API
         public static IServiceCollection AddCustomMessagingQueue(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMassTransit(config =>
-            {
-                config.AddConsumer<UpdateDueDateEventConsumer>();
-                config.AddConsumer<UpdateReminderDateEventConsumer>();
-
+            {               
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host(configuration["EventBusSettings:HostAddress"]);
+                    cfg.Host(configuration["EventBusSettings:HostAddress"]);             
 
-                    cfg.ReceiveEndpoint(EventBusConstants.DueDateUpdateQueue, c =>
-                    {
-                        c.ConfigureConsumer<UpdateDueDateEventConsumer>(ctx);
-                    });
-                    cfg.ReceiveEndpoint(EventBusConstants.ReminderDateUpdateQueue, c =>
-                    {
-                        c.ConfigureConsumer<UpdateReminderDateEventConsumer>(ctx);
-                    });
-
-                });
-                
-
+                });                
             });
             return services;
 
@@ -217,6 +204,19 @@ namespace Tasks.API
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;
                 });
+        }
+
+        public static IServiceCollection AddHealthMonitoring(this IServiceCollection services,
+          IConfiguration configuration)
+        {
+
+            services.AddHealthChecks()
+                 .AddMongoDb(configuration["NoSqlDatabaseSettings:ConnectionString"]
+                 , "MongoDb Health", HealthStatus.Degraded)
+                 .AddRedis(configuration["CacheDbSettings:ConnectionString"], 
+                  "Redis Health", HealthStatus.Degraded);
+
+            return services;
         }
     }
 

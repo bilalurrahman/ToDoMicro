@@ -62,10 +62,31 @@ services:
       context: .
       dockerfile: ApiGateway/ApiGw/Dockerfile
 
+  eventbus.job:
+    image: ${DOCKER_REGISTRY-}eventbusjob
+    build:
+      context: .
+      dockerfile: MessagingQueue/MessagingQueue.Job/Dockerfile
+
+  healthmonitor.ui:
+    image: ${DOCKER_REGISTRY-}healthmonitorui
+    build:
+      context: .
+      dockerfile: HealthMonitor/HealthMonitor.UI/Dockerfile
+
+  todo.aggregator.api:
+    image: ${DOCKER_REGISTRY-}todoaggregatorapi
+    build:
+      context: .
+      dockerfile: ApiGateway/Todo.Aggregator/Dockerfile
+
 volumes:
   portainer_data:    
   sql_data:
   mongo_data:
+
+
+
 
 
 
