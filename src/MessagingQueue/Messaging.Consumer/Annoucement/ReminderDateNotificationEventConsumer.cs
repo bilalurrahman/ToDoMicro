@@ -16,6 +16,7 @@ namespace EventBus.Consumer.Annoucement
     {
         private readonly IRestClient _restClient;
         protected string _sendMail => "http://announcement.api/Email/SendEmail";
+        protected string _pushNotification => "http://announcement.api/PushNotification/Notify";
 
         private readonly ILogger<ReminderDateNotificationEventConsumer> _logger;
         public ReminderDateNotificationEventConsumer(ILogger<ReminderDateNotificationEventConsumer> logger, IRestClient restClient)
@@ -35,7 +36,7 @@ namespace EventBus.Consumer.Annoucement
             };
 
             var response = await _restClient.PostAsync<string, EmailClientModel>(_sendMail, request);
-
+            await _restClient.PostAsync<string, PushNotificationModel>(_pushNotification, new PushNotificationModel { Title = request.Subject, Description = request.Body });
 
             _logger.LogInformation("ReminderDateNotificationEventConsumer consumed successfully");
 

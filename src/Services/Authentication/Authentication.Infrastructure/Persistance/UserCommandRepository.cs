@@ -80,6 +80,31 @@ namespace Authentication.Infrastructure.Persistance
             });
         }
 
+        public async Task<bool> InsertUserDevice(UserNotificationDevices userNotificationDevices)
+        {
+            return await Resiliance.serviceFaultPolicy(logger).Result.ExecuteAsync(async () =>
+            {
+                using (IDbConnection _dbConnection = this.GetConnection())
+                {
+                    string query = @"INSERT INTO [UsersDb].[dbo].[UserNotificationDevices] ([user_id], [device_token])
+                                        SELECT @userid, @devicetoken
+                                        WHERE NOT EXISTS (
+                                            SELECT 1
+                                            FROM [dbo].[UserNotificationDevices]
+                                            WHERE [device_token] = @devicetoken
+                                        )";
+
+                    await _dbConnection.ExecuteAsync(query,
+                       new
+                       {
+                           userid = userNotificationDevices.user_id,
+                           devicetoken = userNotificationDevices.device_token                           
+                       });
+                    return true;
+                }
+            });
+        }
+
         public UserCommandRepository(IConfiguration configuration, ILogger<UserCommandRepository> logger)
         {
             _configuration = configuration;
