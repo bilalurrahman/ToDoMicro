@@ -14,6 +14,7 @@ namespace EventBus.Consumer.Annoucement
         private readonly ILogger<NewTaskEmailCreationEventConsumer> _logger;
         private readonly IRestClient _restClient;
         protected string _sendMail => "http://announcement.api/Email/SendEmail";
+        protected string _pushNotification => "http://announcement.api/PushNotification/Notify";
         public NewTaskEmailCreationEventConsumer(ILogger<NewTaskEmailCreationEventConsumer> logger, IRestClient restClient)
         {
             _logger = logger;
@@ -29,7 +30,9 @@ namespace EventBus.Consumer.Annoucement
                 ToEmail = context?.Message?.userDetails?.email
             };
 
-            var response = await _restClient.PostAsync<string, EmailClientModel>(_sendMail, request);
+            //var response = await _restClient.PostAsync<string, EmailClientModel>(_sendMail, request);
+            await _restClient.PostAsync<string, PushNotificationModel>(_pushNotification, new PushNotificationModel { Title = request.Subject, Description = request.Body });
+
 
 
             _logger.LogInformation("NewTaskEmailCreationEvent consumed successfully");

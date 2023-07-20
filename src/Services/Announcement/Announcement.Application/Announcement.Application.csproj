@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.FirebaseCloudMessaging.v1" Version="1.61.0.3098" />
     <PackageReference Include="MailKit" Version="4.1.0" />
     <PackageReference Include="MassTransit" Version="8.0.16" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.16" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="MimeKit" Version="4.1.0" />
   </ItemGroup>
 
@@ -16,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Folder Include="MessageConsumer\" />
   </ItemGroup>
 
 </Project>
