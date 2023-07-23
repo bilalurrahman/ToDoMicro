@@ -2,6 +2,7 @@
 using MediatR;
 using System.Threading.Tasks;
 using Authentication.Application.Features.NotificationDevices.Command;
+using Authentication.Application.Features.NotificationDevices.Query;
 
 namespace Authentication.API.Controllers
 {
@@ -23,6 +24,17 @@ namespace Authentication.API.Controllers
             var response = await _mediator.Send(credential);
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int userId)
+        {
+            var response = await _mediator.Send(new GetDevicesTokenRequest { 
+                userId = userId
+            });
+            return Ok(response);
+        }
+
+
 
     }
 }

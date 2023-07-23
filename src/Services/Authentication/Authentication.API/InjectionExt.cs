@@ -85,6 +85,7 @@ namespace Authentication.API
             services.AddScoped<IHttpContextHelper, HttpContextHelper>();
             services.AddScoped<IJWTCreateToken, JWTCreateToken>();
             services.AddScoped<IUserQueryRepository, UserQueryRepository>();
+            services.AddScoped<IDeviceQueryRepository, DeviceQueryRepository>();
             services.AddScoped<IUserCommandRepository, UserCommandRepository>();
             
 

@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\NotificationDevices\Query\" />
     <Folder Include="Features\Register\Commands\UpdateUser\" />
   </ItemGroup>
 
