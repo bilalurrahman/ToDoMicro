@@ -87,13 +87,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HealthMonitor", "HealthMoni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthMonitor.UI", "HealthMonitor\HealthMonitor.UI\HealthMonitor.UI.csproj", "{87A8F29D-CCA2-459C-BA15-FCAFC3834E18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Aggregator.API", "ApiGateway\Todo.Aggregator\Todo.Aggregator.API.csproj", "{9BED1C05-1B7C-4C93-B59C-F01A6946CD8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Aggregator.API", "ApiGateway\Todo.Aggregator\Todo.Aggregator.API.csproj", "{9BED1C05-1B7C-4C93-B59C-F01A6946CD8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TodoAggregator", "TodoAggregator", "{99EC1B45-D541-47E5-B1BC-B4FD4BB18130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Aggregator.Application", "..\Todo.Aggregator.Application\Todo.Aggregator.Application.csproj", "{09142172-C46B-4A3C-B2B5-F8049BF491AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Aggregator.Application", "..\Todo.Aggregator.Application\Todo.Aggregator.Application.csproj", "{09142172-C46B-4A3C-B2B5-F8049BF491AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Aggregator.Infrastructure", "ApiGateway\TodoAggregator\Todo.Aggregator.Infrastructure\Todo.Aggregator.Infrastructure.csproj", "{F1DE0EE5-A676-4B37-B330-6280D154D5AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Aggregator.Infrastructure", "ApiGateway\TodoAggregator\Todo.Aggregator.Infrastructure\Todo.Aggregator.Infrastructure.csproj", "{F1DE0EE5-A676-4B37-B330-6280D154D5AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

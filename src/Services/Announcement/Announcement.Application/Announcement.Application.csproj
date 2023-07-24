@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MessagingQueue.Messages\EventsBus.Messages.csproj" />
+    <ProjectReference Include="..\..\Shared\SharedKernal.Core\SharedKernal.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

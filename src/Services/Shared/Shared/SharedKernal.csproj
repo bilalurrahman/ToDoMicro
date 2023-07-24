@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Bilal</Authors>
+    <Company>dev-trax</Company>
+    <PackageProjectUrl>https://github.com/bilalurrahman/ToDoMicro/tree/main/src/Services/Shared/Shared</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,10 +12,13 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MessagingQueue.Messages\EventsBus.Messages.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared\SharedKernal.csproj" />
     <ProjectReference Include="..\Annoucement.Integration\Annoucement.Infrastructure.csproj" />
     <ProjectReference Include="..\Announcement.Application\Announcement.Application.csproj" />
   </ItemGroup>

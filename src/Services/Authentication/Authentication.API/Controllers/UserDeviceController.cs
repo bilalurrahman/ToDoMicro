@@ -3,12 +3,15 @@ using MediatR;
 using System.Threading.Tasks;
 using Authentication.Application.Features.NotificationDevices.Command;
 using Authentication.Application.Features.NotificationDevices.Query;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Authentication.API.Controllers
 {
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserDeviceController : ControllerBase
     {
         private readonly IMediator _mediator;

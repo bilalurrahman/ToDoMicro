@@ -36,7 +36,7 @@ namespace EventBus.Consumer.Annoucement
             };
 
             var response = await _restClient.PostAsync<string, EmailClientModel>(_sendMail, request);
-            await _restClient.PostAsync<string, PushNotificationModel>(_pushNotification, new PushNotificationModel { Title = request.Subject, Description = request.Body });
+            await _restClient.PostAsync<string, PushNotificationModel>(_pushNotification, new PushNotificationModel { Title = request.Subject, Description = request.Body, userId = context.Message.userDetails.userId });
 
             _logger.LogInformation("ReminderDateNotificationEventConsumer consumed successfully");
 

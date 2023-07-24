@@ -13,6 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Microsoft.OpenApi.Models;
+using Serilog;
+using SharedKernal.Common.HttpContextHelper;
+using SharedKernal.Core.Interfaces.RestClient;
+using SharedKernal.Integration.RestClient;
 using System.Reflection;
 
 namespace Announcement.API
@@ -51,7 +55,10 @@ namespace Announcement.API
 
 
             services.AddScoped<IFireBaseIntegration, FireBaseIntegration>();
-            
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IHttpContextHelper, HttpContextHelper>();
+            services.AddScoped<IRestClient, RestClient>();
 
 
             services.AddHealthChecks();
@@ -69,7 +76,7 @@ namespace Announcement.API
             }
 
             app.UseRouting();
-
+            app.UseSerilogRequestLogging();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

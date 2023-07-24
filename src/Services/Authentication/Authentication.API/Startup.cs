@@ -46,6 +46,7 @@ namespace Authentication.API
             services.AddCustomFluentValidation(Configuration);
             services.AddCustomMediatr(Configuration);
             services.AddCustomConfiguration(Configuration);
+            services.AddCustomSwagger(Configuration);
             services.AddDependencyInjection(Configuration);
             services.AddSharedKernalDependencies();
             services.AddLocalizationGrpcDependencies(Configuration);
@@ -58,11 +59,11 @@ namespace Authentication.API
 
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
 
-            });
+            //});
             ContainerManager.Container = services.BuildServiceProvider();
         }
 
