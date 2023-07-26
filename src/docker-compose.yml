@@ -79,11 +79,17 @@ services:
     build:
       context: .
       dockerfile: ApiGateway/Todo.Aggregator/Dockerfile
+  elasticsearch:
+    image: elasticsearch:7.9.2
+
+  kibana:
+    image: kibana:7.9.2
 
 volumes:
   portainer_data:    
   sql_data:
   mongo_data:
+  elasticsearch-data:
 
 
 

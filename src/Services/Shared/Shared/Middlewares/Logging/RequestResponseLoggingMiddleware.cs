@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Internal;
+//using Microsoft.AspNetCore.Http.Internal;
 public class RequestResponseLoggingMiddleware
 {
     private readonly RequestDelegate _next;

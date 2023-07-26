@@ -144,7 +144,7 @@ namespace Authentication.API
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasks.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer",
                     new OpenApiSecurityScheme()
                     {

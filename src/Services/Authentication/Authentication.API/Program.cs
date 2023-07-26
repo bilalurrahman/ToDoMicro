@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
 using System.IO;
+using SharedKernal.Common.Loggings;
 
 namespace Authentication.API
 {
@@ -30,8 +31,7 @@ namespace Authentication.API
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-            .UseSerilog((hostingContext, loggerConfiguration) =>
-                        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));         
+            .UseSerilog(CommonLogging.Configure);         
                 
     }
 }
